@@ -7,9 +7,24 @@ type Props = {
   locked: boolean;
 };
 
-const hidden = "#D8DCE3";
-const ink = "#111827";
-const skin = "#F3C7A8";
+const hidden = "#CFD5DE";
+const ink = "#171717";
+
+const skinTones = ["#F3C7A8", "#E9B48F", "#C98B62", "#7A553B", "#F1D8A8"];
+const baseFurs = ["#F6C453", "#F59E0B", "#94A3B8", "#7DD3FC", "#A7F3D0", "#F9A8D4"];
+const bgGradients = [
+  ["#FDE68A", "#FBCFE8"],
+  ["#BAE6FD", "#DDD6FE"],
+  ["#BBF7D0", "#FEF3C7"],
+  ["#FECACA", "#E0E7FF"],
+  ["#CFFAFE", "#FDE68A"],
+];
+
+function hashText(text: string) {
+  let hash = 0;
+  for (let i = 0; i < text.length; i += 1) hash = (hash * 31 + text.charCodeAt(i)) >>> 0;
+  return hash;
+}
 
 function activeColor(targetHex: string, playerHex: string, reveal: boolean, locked: boolean) {
   if (reveal || locked) return targetHex;
@@ -19,39 +34,81 @@ function activeColor(targetHex: string, playerHex: string, reveal: boolean, lock
 export default function CharacterMemoryCard({ question, reveal, playerHex, locked }: Props) {
   const part = question.targetPart.toLowerCase();
   const active = activeColor(question.targetColorHex, playerHex, reveal, locked);
-  const isBody = /body|skin|fur|feathers/.test(part);
-  const isClothes = /shirt|dress|jacket|gi|outfit|tunic|armor|shorts|battle suit|cape/.test(part);
-  const isAccent = /hat|bow|cheek|hair|helmet|tiara|bill|arrow|shoes/.test(part);
-  const body = isBody ? active : skin;
-  const clothes = isClothes ? active : hidden;
-  const accent = isAccent ? active : hidden;
+  const hash = hashText(question.characterName + question.sourceTitle);
+  const bg = bgGradients[hash % bgGradients.length];
+  const naturalSkin = skinTones[hash % skinTones.length];
+  const naturalFur = baseFurs[(hash >> 3) % baseFurs.length];
+  const targetHidden = !reveal && !locked;
+
+  const bodyTarget = /body|skin|fur|feathers/.test(part);
+  const clothesTarget = /shirt|dress|jacket|gi|outfit|tunic|armor|shorts|battle suit/.test(part);
+  const capeTarget = part.includes("cape");
+  const hairTarget = part.includes("hair");
+  const hatTarget = /hat|helmet|tiara/.test(part);
+  const bowTarget = part.includes("bow");
+  const cheekTarget = part.includes("cheek");
+  const shoesTarget = part.includes("shoes");
+  const billTarget = part.includes("bill");
+
+  const body = bodyTarget ? active : naturalFur;
+  const face = /skin/.test(part) ? active : naturalSkin;
+  const clothes = clothesTarget ? active : "#4F7FD9";
+  const cape = capeTarget ? active : "#8B5CF6";
+  const hair = hairTarget ? active : "#3A2A21";
+  const hat = hatTarget ? active : "#22C55E";
+  const bow = bowTarget ? active : "#F43F5E";
+  const cheek = cheekTarget ? active : "#F7A6B8";
+  const shoes = shoesTarget ? active : "#334155";
+  const bill = billTarget ? active : "#F59E0B";
 
   return (
-    <div className="rounded-3xl border border-slate-200 bg-white p-3">
-      <div className="mb-2 flex items-center justify-between text-xs font-semibold text-slate-500">
+    <div className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
+      <div className="flex items-center justify-between px-3 py-2 text-xs font-semibold text-slate-500">
         <span>{reveal ? "Memorize" : locked ? "Answer" : "Hidden target"}</span>
         <span>{question.targetPart}</span>
       </div>
-      <svg viewBox="0 0 320 320" role="img" aria-label={`Abstract memory card for ${question.characterName}`} className="aspect-square w-full rounded-2xl bg-slate-50">
-        <circle cx="160" cy="112" r="58" fill={body} stroke={ink} strokeWidth="5" />
-        <path d="M99 91 Q160 39 221 91" fill={part.includes("hair") ? accent : hidden} stroke={ink} strokeWidth="5" strokeLinejoin="round" />
-        <circle cx="138" cy="106" r="9" fill="#fff" stroke={ink} strokeWidth="3" />
-        <circle cx="182" cy="106" r="9" fill="#fff" stroke={ink} strokeWidth="3" />
-        <circle cx="140" cy="108" r="3.5" fill={ink} />
-        <circle cx="184" cy="108" r="3.5" fill={ink} />
-        <path d="M137 137 Q160 153 184 137" fill="none" stroke={ink} strokeWidth="5" strokeLinecap="round" />
-        <circle cx="110" cy="132" r="11" fill={part.includes("cheek") ? accent : "#F7B5C8"} stroke={ink} strokeWidth="3" />
-        <circle cx="210" cy="132" r="11" fill={part.includes("cheek") ? accent : "#F7B5C8"} stroke={ink} strokeWidth="3" />
-        <path d="M114 184 H206 Q245 199 258 272 H62 Q75 199 114 184 Z" fill={clothes} stroke={ink} strokeWidth="5" strokeLinejoin="round" />
-        <path d="M114 184 Q160 219 206 184" fill="#ffffff80" stroke={ink} strokeWidth="4" />
-        <path d="M107 54 H213 L198 31 H122 Z" fill={part.includes("hat") || part.includes("helmet") || part.includes("tiara") ? accent : hidden} stroke={ink} strokeWidth="5" strokeLinejoin="round" />
-        <path d="M102 62 H218" stroke={ink} strokeWidth="5" strokeLinecap="round" />
-        <path d="M228 64 l28 15 l-28 15 l-28 -15 Z" fill={part.includes("bow") ? accent : "#F472B6"} stroke={ink} strokeWidth="4" strokeLinejoin="round" />
-        <path d="M232 188 Q272 224 263 279" fill="none" stroke={part.includes("cape") ? accent : hidden} strokeWidth="14" strokeLinecap="round" />
-        {!reveal && !locked && (
+      <svg viewBox="0 0 360 360" role="img" aria-label={`Original cartoon-style memory card for ${question.characterName}`} className="aspect-square w-full bg-slate-50">
+        <defs>
+          <linearGradient id={`bg-${hash}`} x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stopColor={bg[0]} />
+            <stop offset="100%" stopColor={bg[1]} />
+          </linearGradient>
+          <filter id={`soft-${hash}`} x="-20%" y="-20%" width="140%" height="140%">
+            <feDropShadow dx="0" dy="10" stdDeviation="8" floodColor="#0f172a" floodOpacity="0.18" />
+          </filter>
+          <clipPath id={`cardClip-${hash}`}>
+            <rect x="18" y="18" width="324" height="324" rx="34" />
+          </clipPath>
+        </defs>
+        <rect x="18" y="18" width="324" height="324" rx="34" fill={`url(#bg-${hash})`} />
+        <g clipPath={`url(#cardClip-${hash})`}>
+          <circle cx="292" cy="74" r="38" fill="#ffffff66" />
+          <circle cx="64" cy="282" r="54" fill="#ffffff55" />
+          <path d="M96 281 C120 206 242 206 266 281 L281 361 H81 Z" fill={clothes} stroke={ink} strokeWidth="7" filter={`url(#soft-${hash})`} />
+          <path d="M92 228 C48 251 36 311 45 361 H109 C112 303 120 260 143 238 Z" fill={cape} opacity="0.92" stroke={ink} strokeWidth="6" />
+          <path d="M268 228 C312 251 324 311 315 361 H251 C248 303 240 260 217 238 Z" fill={cape} opacity="0.92" stroke={ink} strokeWidth="6" />
+          <circle cx="180" cy="139" r="78" fill={bodyTarget ? body : face} stroke={ink} strokeWidth="7" filter={`url(#soft-${hash})`} />
+          <path d="M99 121 C111 56 248 49 262 123 C226 95 147 100 99 121 Z" fill={hair} stroke={ink} strokeWidth="7" strokeLinejoin="round" />
+          <path d="M111 72 H249 L233 35 H128 Z" fill={hat} stroke={ink} strokeWidth="7" strokeLinejoin="round" />
+          <path d="M101 78 H259" stroke={ink} strokeWidth="7" strokeLinecap="round" />
+          <path d="M250 80 l38 20 l-38 20 l-38 -20 Z" fill={bow} stroke={ink} strokeWidth="6" strokeLinejoin="round" />
+          <ellipse cx="145" cy="132" rx="18" ry="22" fill="#fff" stroke={ink} strokeWidth="5" />
+          <ellipse cx="214" cy="132" rx="18" ry="22" fill="#fff" stroke={ink} strokeWidth="5" />
+          <circle cx="149" cy="136" r="6" fill={ink} />
+          <circle cx="210" cy="136" r="6" fill={ink} />
+          <ellipse cx="104" cy="158" rx="18" ry="14" fill={cheek} stroke={ink} strokeWidth="4" />
+          <ellipse cx="256" cy="158" rx="18" ry="14" fill={cheek} stroke={ink} strokeWidth="4" />
+          <path d="M148 174 C162 192 198 192 212 174" fill="none" stroke={ink} strokeWidth="7" strokeLinecap="round" />
+          <ellipse cx="180" cy="155" rx="16" ry="10" fill={bill} stroke={ink} strokeWidth="5" />
+          <path d="M124 247 C146 276 214 276 236 247" fill="#ffffff55" stroke={ink} strokeWidth="5" />
+          <ellipse cx="129" cy="330" rx="36" ry="18" fill={shoes} stroke={ink} strokeWidth="6" />
+          <ellipse cx="231" cy="330" rx="36" ry="18" fill={shoes} stroke={ink} strokeWidth="6" />
+        </g>
+        {targetHidden && (
           <g>
-            <rect x="36" y="36" width="248" height="248" rx="22" fill="#f8fafc" opacity="0.58" />
-            <text x="160" y="296" textAnchor="middle" fill="#64748b" fontSize="15" fontWeight="700">match from memory</text>
+            <rect x="18" y="18" width="324" height="324" rx="34" fill="#f8fafc" opacity="0.48" />
+            <circle cx="180" cy="154" r="92" fill="none" stroke={hidden} strokeWidth="18" opacity="0.85" />
+            <text x="180" y="316" textAnchor="middle" fill="#475569" fontSize="18" fontWeight="800">match from memory</text>
           </g>
         )}
       </svg>
