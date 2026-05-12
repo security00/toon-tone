@@ -62,12 +62,12 @@ export default function CharacterMemoryCard({ question, reveal, playerHex, locke
   const bill = billTarget ? active : "#F59E0B";
 
   return (
-    <div className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
-      <div className="flex items-center justify-between px-3 py-2 text-xs font-semibold text-slate-500">
+    <div className="h-full overflow-hidden rounded-[2rem] bg-white shadow-[0_22px_60px_rgba(79,70,229,0.14)] ring-1 ring-slate-200">
+      <div className="flex items-center justify-between px-4 py-3 text-xs font-black uppercase tracking-[0.14em] text-slate-500">
         <span>{reveal ? "Memorize" : locked ? "Answer" : "Hidden target"}</span>
         <span>{question.targetPart}</span>
       </div>
-      <svg viewBox="0 0 360 360" role="img" aria-label={`Original cartoon-style memory card for ${question.characterName}`} className="aspect-square w-full bg-slate-50">
+      <svg viewBox="0 0 360 360" role="img" aria-label={`Original cartoon-style memory card for ${question.characterName}`} className="aspect-square h-full min-h-[360px] w-full bg-slate-50">
         <defs>
           <linearGradient id={`bg-${hash}`} x1="0" y1="0" x2="1" y2="1">
             <stop offset="0%" stopColor={bg[0]} />
@@ -81,7 +81,7 @@ export default function CharacterMemoryCard({ question, reveal, playerHex, locke
           </clipPath>
         </defs>
         <rect x="18" y="18" width="324" height="324" rx="34" fill={`url(#bg-${hash})`} />
-        <g clipPath={`url(#cardClip-${hash})`}>
+        <g clipPath={`url(#cardClip-${hash})`} transform="translate(0 6) scale(1.04 1.04) translate(-7 -8)">
           <circle cx="292" cy="74" r="38" fill="#ffffff66" />
           <circle cx="64" cy="282" r="54" fill="#ffffff55" />
           <path d="M96 281 C120 206 242 206 266 281 L281 361 H81 Z" fill={clothes} stroke={ink} strokeWidth="7" filter={`url(#soft-${hash})`} />
@@ -106,8 +106,8 @@ export default function CharacterMemoryCard({ question, reveal, playerHex, locke
         </g>
         {targetHidden && (
           <g>
-            <rect x="18" y="18" width="324" height="324" rx="34" fill="#f8fafc" opacity="0.48" />
-            <circle cx="180" cy="154" r="92" fill="none" stroke={hidden} strokeWidth="18" opacity="0.85" />
+            <rect x="18" y="18" width="324" height="324" rx="34" fill="#f8fafc" opacity="0.38" />
+            <circle cx="180" cy="154" r="98" fill="none" stroke={hidden} strokeWidth="18" opacity="0.82" />
             <text x="180" y="316" textAnchor="middle" fill="#475569" fontSize="18" fontWeight="800">match from memory</text>
           </g>
         )}
