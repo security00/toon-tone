@@ -1,0 +1,12 @@
+import Link from "next/link";
+export default function Page() {
+  return (
+    <main className="min-h-screen bg-[#fff7ed] px-6 py-10 text-slate-950">
+      <div className="mx-auto max-w-3xl rounded-[2rem] border-4 border-slate-950 bg-white p-6 shadow-[8px_8px_0_#0f172a]">
+        <Link href="/" className="font-black text-pink-600">← Play Toon-Tone</Link>
+        <h1 className="mt-4 text-4xl font-black">Leaderboard</h1>
+        <p className="mt-4 leading-8 text-slate-700">The public leaderboard is planned for the next phase. For the MVP, Toon-Tone stores recent scores locally and focuses on share cards so you can challenge friends without creating an account.</p>
+      </div>
+    </main>
+  );
+}
