@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import CharacterMemoryCard from "./CharacterMemoryCard";
+import ColorMatchPanel from "./ColorMatchPanel";
 import { getDailyQuestions, todaySeed } from "@/lib/challenge";
 import { deltaE, feedbackForGuess, hsbToHex, ratingFromAverage, scoreFromDelta, type Hsb } from "@/lib/color";
 
@@ -242,51 +243,35 @@ export default function ToonToneGame() {
   }
 
   return (
-    <section className="mx-auto max-w-4xl rounded-[2rem] bg-white p-4 shadow-sm ring-1 ring-slate-200 sm:p-5 lg:p-6">
-      <div className="mb-4 flex items-center justify-between">
-        <div className="text-xl font-black tracking-tight text-slate-950">Toon Tone</div>
-        <div className="rounded-full bg-slate-100 px-3 py-1 text-sm font-bold text-slate-600">{roundIndex + 1}/5</div>
+    <section className="mx-auto max-w-6xl px-1">
+      <div className="mb-6 text-center">
+        <p className="text-sm font-bold text-slate-500">Toon Tone · {roundIndex + 1}/5</p>
+        <h1 className="mx-auto mt-2 max-w-4xl text-3xl font-black leading-tight tracking-tight text-slate-950 sm:text-5xl">
+          What is the color of <span className="bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 bg-clip-text text-transparent">{question.characterName}&apos;s {question.targetPart}</span>?
+        </h1>
+        <p className="mt-2 text-sm font-medium text-slate-500">from {question.sourceTitle}</p>
       </div>
 
-      <div className="grid gap-5 lg:grid-cols-[1fr_0.9fr] lg:items-start">
-        <div>
-          <div className="text-center lg:text-left">
-            <p className="text-sm font-medium text-slate-500">What color is</p>
-            <h1 className="mt-1 text-2xl font-black leading-tight tracking-tight text-slate-950 sm:text-3xl">{question.characterName}&apos;s {question.targetPart}?</h1>
-            <p className="mt-1 text-sm text-slate-500">{question.sourceTitle}</p>
-          </div>
-          <div className="mt-4">
-            <CharacterMemoryCard question={question} reveal={memorizing} playerHex={playerHex} locked={locked} />
-          </div>
-        </div>
+      <div className="grid gap-5 lg:grid-cols-[1fr_1fr] lg:items-stretch">
+        <CharacterMemoryCard question={question} reveal={memorizing} playerHex={playerHex} locked={locked} />
+        <ColorMatchPanel
+          hsb={hsb}
+          playerHex={playerHex}
+          started={started}
+          locked={locked}
+          memorizing={memorizing}
+          usedHint={usedHint}
+          progress={`${roundIndex + 1}/5`}
+          onChange={updateHsb}
+          onStart={startRound}
+          onSubmit={submit}
+          onHint={() => setUsedHint(true)}
+        />
+      </div>
 
-        <div className="space-y-3">
-          <div className="rounded-2xl bg-slate-50 p-3">
-            <div className="flex items-center gap-3">
-              <div className="h-14 w-14 rounded-xl ring-1 ring-slate-200" style={{ backgroundColor: playerHex }} />
-              <div>
-                <p className="text-sm font-semibold text-slate-600">Your color</p>
-                <p className="font-mono text-sm text-slate-500">{playerHex}</p>
-              </div>
-            </div>
-          </div>
-
-          <Slider label="Hue" value={hsb.h} min={0} max={360} disabled={locked || !started} onChange={(value) => updateHsb("h", value)} gradient="linear-gradient(90deg,#f00,#ff0,#0f0,#0ff,#00f,#f0f,#f00)" />
-          <Slider label="Saturation" value={hsb.s} min={0} max={100} disabled={locked || !started} onChange={(value) => updateHsb("s", value)} gradient={`linear-gradient(90deg,#fff,${hsbToHex({ h: hsb.h, s: 100, b: hsb.b })})`} />
-          <Slider label="Brightness" value={hsb.b} min={0} max={100} disabled={locked || !started} onChange={(value) => updateHsb("b", value)} gradient={`linear-gradient(90deg,#000,${hsbToHex({ h: hsb.h, s: hsb.s, b: 100 })})`} />
-
-          <div className="grid grid-cols-[1fr_auto] gap-3">
-            {!started ? (
-              <button onClick={startRound} className="rounded-2xl bg-slate-950 px-5 py-4 font-bold text-white">Start</button>
-            ) : (
-              <button disabled={locked || memorizing} onClick={submit} className="rounded-2xl bg-slate-950 px-5 py-4 font-bold text-white disabled:cursor-not-allowed disabled:opacity-40">Lock guess</button>
-            )}
-            <button disabled={!started || locked || usedHint} onClick={() => setUsedHint(true)} className="rounded-2xl bg-slate-100 px-5 py-4 font-bold text-slate-950 disabled:cursor-not-allowed disabled:opacity-40">Hint</button>
-          </div>
-
-          {started && !locked && <button onClick={revealFlash} className="w-full rounded-2xl border border-slate-200 px-5 py-3 text-sm font-bold text-slate-600">Flash target again</button>}
-          {usedHint && <p className="text-center text-sm font-medium text-slate-500">{hueHint(question.targetColorHex)}</p>}
-        </div>
+      <div className="mt-3 flex flex-wrap items-center justify-center gap-3">
+        {started && !locked && <button onClick={revealFlash} className="rounded-full border border-slate-200 bg-white px-5 py-3 text-sm font-bold text-slate-600 shadow-sm">Flash target again</button>}
+        {usedHint && <p className="text-center text-sm font-medium text-slate-500">{hueHint(question.targetColorHex)}</p>}
       </div>
 
       {currentResult && (
@@ -302,11 +287,3 @@ export default function ToonToneGame() {
   );
 }
 
-function Slider({ label, value, min, max, disabled, gradient, onChange }: { label: string; value: number; min: number; max: number; disabled: boolean; gradient: string; onChange: (value: number) => void }) {
-  return (
-    <label className="block rounded-2xl bg-slate-50 p-4">
-      <span className="mb-2 flex justify-between text-sm font-semibold text-slate-700"><span>{label}</span><span>{value}</span></span>
-      <input className="h-7 w-full cursor-pointer appearance-none rounded-full border border-slate-200 disabled:cursor-not-allowed disabled:opacity-50" style={{ background: gradient }} type="range" min={min} max={max} value={value} disabled={disabled} onChange={(event) => onChange(Number(event.target.value))} />
-    </label>
-  );
-}
