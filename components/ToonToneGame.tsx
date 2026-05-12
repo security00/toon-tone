@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import CharacterMemoryCard from "./CharacterMemoryCard";
 import { getDailyQuestions, todaySeed } from "@/lib/challenge";
 import { deltaE, feedbackForGuess, hsbToHex, ratingFromAverage, scoreFromDelta, type Hsb } from "@/lib/color";
@@ -43,6 +43,8 @@ export default function ToonToneGame() {
   const [results, setResults] = useState<RoundResult[]>([]);
   const [copied, setCopied] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const audioRef = useRef<AudioContext | null>(null);
+  const lastTickRef = useRef(0);
 
   const question = questions[roundIndex];
   const playerHex = hsbToHex(hsb);
@@ -51,6 +53,39 @@ export default function ToonToneGame() {
   const finalScore = average(results);
   const rating = ratingFromAverage(finalScore);
   const memorizing = started && !locked && !complete && now < flashUntil;
+
+  const playTone = useCallback((frequency: number, duration = 0.08, type: OscillatorType = "sine", gainValue = 0.035) => {
+    if (typeof window === "undefined") return;
+    const AudioContextCtor = window.AudioContext || (window as typeof window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+    if (!AudioContextCtor) return;
+    const context = audioRef.current ?? new AudioContextCtor();
+    audioRef.current = context;
+    const oscillator = context.createOscillator();
+    const gain = context.createGain();
+    oscillator.type = type;
+    oscillator.frequency.setValueAtTime(frequency, context.currentTime);
+    gain.gain.setValueAtTime(gainValue, context.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.0001, context.currentTime + duration);
+    oscillator.connect(gain);
+    gain.connect(context.destination);
+    oscillator.start();
+    oscillator.stop(context.currentTime + duration);
+  }, []);
+
+  const playScoreSound = useCallback((score: number) => {
+    if (score >= 8) {
+      playTone(660, 0.09, "triangle", 0.045);
+      window.setTimeout(() => playTone(880, 0.12, "triangle", 0.04), 90);
+      return;
+    }
+    if (score >= 5) {
+      playTone(440, 0.1, "sine", 0.035);
+      window.setTimeout(() => playTone(554, 0.08, "sine", 0.03), 95);
+      return;
+    }
+    playTone(220, 0.16, "sawtooth", 0.025);
+    window.setTimeout(() => playTone(165, 0.18, "sawtooth", 0.02), 120);
+  }, [playTone]);
 
   useEffect(() => {
     const timer = window.setInterval(() => setNow(Date.now()), 120);
@@ -97,11 +132,17 @@ export default function ToonToneGame() {
 
   function startRound() {
     setStarted(true);
+    playTone(523, 0.08, "triangle", 0.035);
     setFlashUntil(Date.now() + 1100);
   }
 
   function updateHsb(key: keyof Hsb, value: number) {
     if (locked) return;
+    const nowMs = Date.now();
+    if (nowMs - lastTickRef.current > 55) {
+      lastTickRef.current = nowMs;
+      playTone(260 + value * 1.7, 0.035, "square", 0.012);
+    }
     setHsb((current) => ({ ...current, [key]: value }));
   }
 
@@ -109,6 +150,7 @@ export default function ToonToneGame() {
     if (!question || locked) return;
     const diff = deltaE(playerHex, question.targetColorHex);
     const score = scoreFromDelta(diff, usedHint);
+    playScoreSound(score);
     setResults((items) => [...items, {
       questionId: question.id,
       characterName: question.characterName,
@@ -121,6 +163,11 @@ export default function ToonToneGame() {
       usedHint,
     }]);
     setLocked(true);
+  }
+
+  function revealFlash() {
+    playTone(740, 0.07, "triangle", 0.026);
+    setFlashUntil(Date.now() + 1100);
   }
 
   function nextRound() {
@@ -195,49 +242,52 @@ export default function ToonToneGame() {
   }
 
   return (
-    <section className="mx-auto max-w-md rounded-[2rem] bg-white p-4 shadow-sm ring-1 ring-slate-200 sm:p-5">
+    <section className="mx-auto max-w-4xl rounded-[2rem] bg-white p-4 shadow-sm ring-1 ring-slate-200 sm:p-5 lg:p-6">
       <div className="mb-4 flex items-center justify-between">
         <div className="text-xl font-black tracking-tight text-slate-950">Toon Tone</div>
         <div className="rounded-full bg-slate-100 px-3 py-1 text-sm font-bold text-slate-600">{roundIndex + 1}/5</div>
       </div>
 
-      <div className="text-center">
-        <p className="text-sm font-medium text-slate-500">What color is</p>
-        <h1 className="mx-auto mt-1 max-w-sm text-2xl font-black leading-tight tracking-tight text-slate-950">{question.characterName}&apos;s {question.targetPart}?</h1>
-        <p className="mt-1 text-sm text-slate-500">{question.sourceTitle}</p>
-      </div>
-
-      <div className="mt-4">
-        <CharacterMemoryCard question={question} reveal={memorizing} playerHex={playerHex} locked={locked} />
-      </div>
-
-      <div className="mt-4 rounded-2xl bg-slate-50 p-3">
-        <div className="flex items-center gap-3">
-          <div className="h-12 w-12 rounded-xl ring-1 ring-slate-200" style={{ backgroundColor: playerHex }} />
-          <div>
-            <p className="text-sm font-semibold text-slate-600">Your color</p>
-            <p className="font-mono text-sm text-slate-500">{playerHex}</p>
+      <div className="grid gap-5 lg:grid-cols-[1fr_0.9fr] lg:items-start">
+        <div>
+          <div className="text-center lg:text-left">
+            <p className="text-sm font-medium text-slate-500">What color is</p>
+            <h1 className="mt-1 text-2xl font-black leading-tight tracking-tight text-slate-950 sm:text-3xl">{question.characterName}&apos;s {question.targetPart}?</h1>
+            <p className="mt-1 text-sm text-slate-500">{question.sourceTitle}</p>
+          </div>
+          <div className="mt-4">
+            <CharacterMemoryCard question={question} reveal={memorizing} playerHex={playerHex} locked={locked} />
           </div>
         </div>
-      </div>
 
-      <div className="mt-4 space-y-3">
-        <Slider label="Hue" value={hsb.h} min={0} max={360} disabled={locked || !started} onChange={(value) => updateHsb("h", value)} gradient="linear-gradient(90deg,#f00,#ff0,#0f0,#0ff,#00f,#f0f,#f00)" />
-        <Slider label="Saturation" value={hsb.s} min={0} max={100} disabled={locked || !started} onChange={(value) => updateHsb("s", value)} gradient={`linear-gradient(90deg,#fff,${hsbToHex({ h: hsb.h, s: 100, b: hsb.b })})`} />
-        <Slider label="Brightness" value={hsb.b} min={0} max={100} disabled={locked || !started} onChange={(value) => updateHsb("b", value)} gradient={`linear-gradient(90deg,#000,${hsbToHex({ h: hsb.h, s: hsb.s, b: 100 })})`} />
-      </div>
+        <div className="space-y-3">
+          <div className="rounded-2xl bg-slate-50 p-3">
+            <div className="flex items-center gap-3">
+              <div className="h-14 w-14 rounded-xl ring-1 ring-slate-200" style={{ backgroundColor: playerHex }} />
+              <div>
+                <p className="text-sm font-semibold text-slate-600">Your color</p>
+                <p className="font-mono text-sm text-slate-500">{playerHex}</p>
+              </div>
+            </div>
+          </div>
 
-      <div className="mt-4 grid grid-cols-[1fr_auto] gap-3">
-        {!started ? (
-          <button onClick={startRound} className="rounded-2xl bg-slate-950 px-5 py-4 font-bold text-white">Start</button>
-        ) : (
-          <button disabled={locked || memorizing} onClick={submit} className="rounded-2xl bg-slate-950 px-5 py-4 font-bold text-white disabled:cursor-not-allowed disabled:opacity-40">Lock guess</button>
-        )}
-        <button disabled={!started || locked || usedHint} onClick={() => setUsedHint(true)} className="rounded-2xl bg-slate-100 px-5 py-4 font-bold text-slate-950 disabled:cursor-not-allowed disabled:opacity-40">Hint</button>
-      </div>
+          <Slider label="Hue" value={hsb.h} min={0} max={360} disabled={locked || !started} onChange={(value) => updateHsb("h", value)} gradient="linear-gradient(90deg,#f00,#ff0,#0f0,#0ff,#00f,#f0f,#f00)" />
+          <Slider label="Saturation" value={hsb.s} min={0} max={100} disabled={locked || !started} onChange={(value) => updateHsb("s", value)} gradient={`linear-gradient(90deg,#fff,${hsbToHex({ h: hsb.h, s: 100, b: hsb.b })})`} />
+          <Slider label="Brightness" value={hsb.b} min={0} max={100} disabled={locked || !started} onChange={(value) => updateHsb("b", value)} gradient={`linear-gradient(90deg,#000,${hsbToHex({ h: hsb.h, s: hsb.s, b: 100 })})`} />
 
-      {started && !locked && <button onClick={() => setFlashUntil(Date.now() + 1100)} className="mt-3 w-full rounded-2xl border border-slate-200 px-5 py-3 text-sm font-bold text-slate-600">Flash target again</button>}
-      {usedHint && <p className="mt-3 text-center text-sm font-medium text-slate-500">{hueHint(question.targetColorHex)}</p>}
+          <div className="grid grid-cols-[1fr_auto] gap-3">
+            {!started ? (
+              <button onClick={startRound} className="rounded-2xl bg-slate-950 px-5 py-4 font-bold text-white">Start</button>
+            ) : (
+              <button disabled={locked || memorizing} onClick={submit} className="rounded-2xl bg-slate-950 px-5 py-4 font-bold text-white disabled:cursor-not-allowed disabled:opacity-40">Lock guess</button>
+            )}
+            <button disabled={!started || locked || usedHint} onClick={() => setUsedHint(true)} className="rounded-2xl bg-slate-100 px-5 py-4 font-bold text-slate-950 disabled:cursor-not-allowed disabled:opacity-40">Hint</button>
+          </div>
+
+          {started && !locked && <button onClick={revealFlash} className="w-full rounded-2xl border border-slate-200 px-5 py-3 text-sm font-bold text-slate-600">Flash target again</button>}
+          {usedHint && <p className="text-center text-sm font-medium text-slate-500">{hueHint(question.targetColorHex)}</p>}
+        </div>
+      </div>
 
       {currentResult && (
         <div className="mt-4 rounded-2xl bg-slate-50 p-4 text-center">
