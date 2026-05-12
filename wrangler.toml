@@ -1,0 +1,11 @@
+name = "toon-tone"
+compatibility_date = "2026-05-12"
+account_id = "faae494a756090f5f9c0ad7b8d1ddb88"
+routes = [
+  { pattern = "toon-tone.net", custom_domain = true },
+  { pattern = "www.toon-tone.net", custom_domain = true }
+]
+
+[assets]
+directory = "./out"
+not_found_handling = "single-page-application"
