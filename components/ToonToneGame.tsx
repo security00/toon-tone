@@ -3,8 +3,9 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import CharacterMemoryCard from "./CharacterMemoryCard";
 import ColorMatchPanel from "./ColorMatchPanel";
+import RoundResultPanel from "./RoundResultPanel";
 import { getDailyQuestions, todaySeed } from "@/lib/challenge";
-import { deltaE, feedbackForGuess, hsbToHex, ratingFromAverage, scoreFromDelta, type Hsb } from "@/lib/color";
+import { deltaE, feedbackForGuess, hexToHsb, hsbToHex, ratingFromAverage, scoreFromDelta, type Hsb } from "@/lib/color";
 
 type RoundResult = {
   questionId: string;
@@ -54,6 +55,8 @@ export default function ToonToneGame() {
   const finalScore = average(results);
   const rating = ratingFromAverage(finalScore);
   const memorizing = started && !locked && !complete && now < flashUntil;
+  const playerHsb = hexToHsb(playerHex);
+  const targetHsb = question ? hexToHsb(question.targetColorHex) : defaultHsb;
 
   const playTone = useCallback((frequency: number, duration = 0.08, type: OscillatorType = "sine", gainValue = 0.035) => {
     if (typeof window === "undefined") return;
@@ -254,19 +257,34 @@ export default function ToonToneGame() {
 
       <div className="grid gap-5 lg:grid-cols-[1fr_1fr] lg:items-stretch">
         <CharacterMemoryCard question={question} reveal={memorizing} playerHex={playerHex} locked={locked} />
-        <ColorMatchPanel
-          hsb={hsb}
-          playerHex={playerHex}
-          started={started}
-          locked={locked}
-          memorizing={memorizing}
-          usedHint={usedHint}
-          progress={`${roundIndex + 1}/5`}
-          onChange={updateHsb}
-          onStart={startRound}
-          onSubmit={submit}
-          onHint={() => setUsedHint(true)}
-        />
+        {currentResult ? (
+          <RoundResultPanel
+            progress={`${roundIndex + 1}/5`}
+            playerHex={currentResult.playerHex}
+            targetHex={currentResult.targetHex}
+            score={currentResult.score}
+            feedback={currentResult.score >= 8 ? "Great eye!" : currentResult.score >= 5 ? "Nice try!" : "Tough one!"}
+            playerLabel={`H${playerHsb.h} S${playerHsb.s} B${playerHsb.b}`}
+            targetLabel={`H${targetHsb.h} S${targetHsb.s} B${targetHsb.b}`}
+            isLastRound={roundIndex === questions.length - 1}
+            onNext={nextRound}
+            onFinish={() => setRoundIndex(roundIndex)}
+          />
+        ) : (
+          <ColorMatchPanel
+            hsb={hsb}
+            playerHex={playerHex}
+            started={started}
+            locked={locked}
+            memorizing={memorizing}
+            usedHint={usedHint}
+            progress={`${roundIndex + 1}/5`}
+            onChange={updateHsb}
+            onStart={startRound}
+            onSubmit={submit}
+            onHint={() => setUsedHint(true)}
+          />
+        )}
       </div>
 
       <div className="mt-3 flex flex-wrap items-center justify-center gap-3">
@@ -274,15 +292,6 @@ export default function ToonToneGame() {
         {usedHint && <p className="text-center text-sm font-medium text-slate-500">{hueHint(question.targetColorHex)}</p>}
       </div>
 
-      {currentResult && (
-        <div className="mt-4 rounded-2xl bg-slate-50 p-4 text-center">
-          <p className="text-sm font-semibold text-slate-500">Round score</p>
-          <p className="text-4xl font-black text-slate-950">{currentResult.score}</p>
-          <p className="mt-2 text-sm text-slate-600">{currentResult.feedback}</p>
-          {roundIndex < questions.length - 1 && <button onClick={nextRound} className="mt-4 w-full rounded-2xl bg-pink-500 px-5 py-4 font-bold text-white">Next</button>}
-          {roundIndex === questions.length - 1 && <button onClick={() => setRoundIndex(roundIndex)} className="mt-4 w-full rounded-2xl bg-pink-500 px-5 py-4 font-bold text-white">View result</button>}
-        </div>
-      )}
     </section>
   );
 }
