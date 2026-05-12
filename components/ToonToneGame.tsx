@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import CharacterMemoryCard from "./CharacterMemoryCard";
 import { getDailyQuestions, todaySeed } from "@/lib/challenge";
 import { deltaE, feedbackForGuess, hsbToHex, ratingFromAverage, scoreFromDelta, type Hsb } from "@/lib/color";
 
@@ -37,6 +38,8 @@ export default function ToonToneGame() {
   const [hsb, setHsb] = useState<Hsb>(defaultHsb);
   const [locked, setLocked] = useState(false);
   const [usedHint, setUsedHint] = useState(false);
+  const [flashUntil, setFlashUntil] = useState(0);
+  const [now, setNow] = useState(0);
   const [results, setResults] = useState<RoundResult[]>([]);
   const [copied, setCopied] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -47,6 +50,12 @@ export default function ToonToneGame() {
   const complete = results.length === questions.length;
   const finalScore = average(results);
   const rating = ratingFromAverage(finalScore);
+  const memorizing = started && !locked && !complete && now < flashUntil;
+
+  useEffect(() => {
+    const timer = window.setInterval(() => setNow(Date.now()), 120);
+    return () => window.clearInterval(timer);
+  }, []);
 
   useEffect(() => {
     if (!complete) return;
@@ -115,6 +124,7 @@ export default function ToonToneGame() {
     setHsb({ h: (hsb.h + 73) % 360, s: 72, b: 86 });
     setLocked(false);
     setUsedHint(false);
+    setFlashUntil(Date.now() + 1200);
   }
 
   function restart() {
@@ -123,6 +133,7 @@ export default function ToonToneGame() {
     setHsb(defaultHsb);
     setLocked(false);
     setUsedHint(false);
+    setFlashUntil(Date.now() + 1200);
     setResults([]);
     setCopied(false);
   }
@@ -196,28 +207,31 @@ export default function ToonToneGame() {
         <div className="rounded-full border-2 border-slate-950 bg-amber-200 px-4 py-2 font-black">Round {roundIndex + 1}/5</div>
       </div>
 
-      <div className="grid gap-5 lg:grid-cols-[0.95fr_1.05fr_0.7fr]">
+      <div className="grid gap-5 lg:grid-cols-[0.9fr_1.15fr_0.75fr]">
         <div className="rounded-3xl bg-slate-950 p-5 text-white">
           <p className="text-sm font-bold text-emerald-200">What color is...</p>
           <h2 className="mt-3 text-3xl font-black leading-tight">{question.characterName}&apos;s {question.targetPart}?</h2>
           <p className="mt-3 text-slate-300">from {question.sourceTitle}</p>
-          <p className="mt-5 rounded-2xl border border-white/20 p-3 text-sm text-slate-300">No official images are used. Play from memory, then lock your guess.</p>
-          {!started && <button onClick={() => setStarted(true)} className="mt-5 w-full rounded-full border-2 border-white bg-[#06d6a0] px-5 py-3 font-black text-slate-950">Start Daily</button>}
+          <p className="mt-5 rounded-2xl border border-white/20 p-3 text-sm text-slate-300">Memorize the highlighted abstract character part. The color flashes briefly, then hides. No official images are used.</p>
+          {!started && <button onClick={() => { setStarted(true); setFlashUntil(Date.now() + 1200); }} className="mt-5 w-full rounded-full border-2 border-white bg-[#06d6a0] px-5 py-3 font-black text-slate-950">Start Daily</button>}
+          {started && !locked && <button onClick={() => setFlashUntil(Date.now() + 1200)} className="mt-5 w-full rounded-full border-2 border-white bg-white px-5 py-3 font-black text-slate-950">Flash target again</button>}
         </div>
 
         <div className="rounded-3xl bg-amber-100 p-5">
-          <div className="grid gap-4 sm:grid-cols-[0.8fr_1.2fr] sm:items-center">
-            <div className="flex aspect-square items-center justify-center rounded-[2rem] border-4 border-slate-950 shadow-[6px_6px_0_#0f172a]" style={{ backgroundColor: playerHex }}>
-              <span className="rounded-full bg-white/85 px-3 py-1 text-sm font-black text-slate-950">Your tone</span>
-            </div>
+          <div className="grid gap-4 sm:grid-cols-[0.86fr_1.14fr] sm:items-center">
+            <CharacterMemoryCard question={question} reveal={memorizing} playerHex={playerHex} locked={locked} />
             <div className="space-y-4">
+              <div className="rounded-3xl border-2 border-slate-950 bg-white p-4">
+                <p className="text-sm font-black uppercase tracking-[0.18em] text-slate-500">Your color</p>
+                <div className="mt-3 h-20 rounded-2xl border-2 border-slate-950" style={{ backgroundColor: playerHex }} />
+              </div>
               <Slider label="Hue" value={hsb.h} min={0} max={360} disabled={locked || !started} onChange={(value) => updateHsb("h", value)} gradient="linear-gradient(90deg,#f00,#ff0,#0f0,#0ff,#00f,#f0f,#f00)" />
               <Slider label="Saturation" value={hsb.s} min={0} max={100} disabled={locked || !started} onChange={(value) => updateHsb("s", value)} gradient={`linear-gradient(90deg,#fff,${hsbToHex({ h: hsb.h, s: 100, b: hsb.b })})`} />
               <Slider label="Brightness" value={hsb.b} min={0} max={100} disabled={locked || !started} onChange={(value) => updateHsb("b", value)} gradient={`linear-gradient(90deg,#000,${hsbToHex({ h: hsb.h, s: hsb.s, b: 100 })})`} />
             </div>
           </div>
           <div className="mt-5 flex flex-wrap gap-3">
-            <button disabled={!started || locked} onClick={submit} className="flex-1 rounded-full border-2 border-slate-950 bg-[#ff4f9a] px-5 py-3 font-black text-white shadow-[4px_4px_0_#0f172a] disabled:cursor-not-allowed disabled:opacity-40">Lock your guess</button>
+            <button disabled={!started || locked || memorizing} onClick={submit} className="flex-1 rounded-full border-2 border-slate-950 bg-[#ff4f9a] px-5 py-3 font-black text-white shadow-[4px_4px_0_#0f172a] disabled:cursor-not-allowed disabled:opacity-40">Lock your guess</button>
             <button disabled={!started || locked || usedHint} onClick={() => setUsedHint(true)} className="rounded-full border-2 border-slate-950 bg-white px-5 py-3 font-black shadow-[4px_4px_0_#0f172a] disabled:cursor-not-allowed disabled:opacity-40">Hint</button>
           </div>
           {usedHint && <p className="mt-3 text-sm font-bold text-slate-700">{hueHint(question.targetColorHex)}</p>}
