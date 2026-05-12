@@ -27,7 +27,7 @@ function average(results: RoundResult[]) {
 
 function hueHint(targetHex: string) {
   const hue = Number.parseInt(targetHex.slice(1, 3), 16) > Number.parseInt(targetHex.slice(5, 7), 16) ? "warm" : "cool";
-  return `Hint used: this memory leans ${hue}. Max score for this round is now 9.`;
+  return `Hint: this color leans ${hue}. Max score is now 9.`;
 }
 
 export default function ToonToneGame() {
@@ -69,9 +69,9 @@ export default function ToonToneGame() {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
-    ctx.fillStyle = "#fff7ed";
+    ctx.fillStyle = "#ffffff";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = "#0f172a";
+    ctx.fillStyle = "#111827";
     ctx.font = "bold 42px sans-serif";
     ctx.fillText("Toon-Tone Daily", 40, 70);
     ctx.font = "bold 88px sans-serif";
@@ -84,16 +84,21 @@ export default function ToonToneGame() {
       const x = 42 + index * 92;
       ctx.fillStyle = result.playerHex;
       ctx.fillRect(x, 330, 70, 70);
-      ctx.strokeStyle = "#0f172a";
-      ctx.lineWidth = 5;
+      ctx.strokeStyle = "#111827";
+      ctx.lineWidth = 4;
       ctx.strokeRect(x, 330, 70, 70);
-      ctx.fillStyle = "#0f172a";
+      ctx.fillStyle = "#111827";
       ctx.font = "bold 20px sans-serif";
       ctx.fillText(String(result.score), x + 14, 435);
     });
     ctx.font = "bold 24px sans-serif";
     ctx.fillText("toon-tone.net", 40, 500);
   }, [complete, finalScore, rating, results, seed]);
+
+  function startRound() {
+    setStarted(true);
+    setFlashUntil(Date.now() + 1100);
+  }
 
   function updateHsb(key: keyof Hsb, value: number) {
     if (locked) return;
@@ -104,7 +109,7 @@ export default function ToonToneGame() {
     if (!question || locked) return;
     const diff = deltaE(playerHex, question.targetColorHex);
     const score = scoreFromDelta(diff, usedHint);
-    const result: RoundResult = {
+    setResults((items) => [...items, {
       questionId: question.id,
       characterName: question.characterName,
       targetPart: question.targetPart,
@@ -114,8 +119,7 @@ export default function ToonToneGame() {
       delta: Number(diff.toFixed(1)),
       feedback: feedbackForGuess(playerHex, question.targetColorHex),
       usedHint,
-    };
-    setResults((items) => [...items, result]);
+    }]);
     setLocked(true);
   }
 
@@ -124,7 +128,7 @@ export default function ToonToneGame() {
     setHsb({ h: (hsb.h + 73) % 360, s: 72, b: 86 });
     setLocked(false);
     setUsedHint(false);
-    setFlashUntil(Date.now() + 1200);
+    setFlashUntil(Date.now() + 1100);
   }
 
   function restart() {
@@ -133,13 +137,13 @@ export default function ToonToneGame() {
     setHsb(defaultHsb);
     setLocked(false);
     setUsedHint(false);
-    setFlashUntil(Date.now() + 1200);
+    setFlashUntil(Date.now() + 1100);
     setResults([]);
     setCopied(false);
   }
 
   async function share() {
-    const text = `I scored ${finalScore}/10 (${rating}) on Toon-Tone Daily ${seed}. Can you beat my color memory? https://toon-tone.net/?challenge=${seed}`;
+    const text = `I scored ${finalScore}/10 (${rating}) on Toon-Tone Daily ${seed}. Can you beat me? https://toon-tone.net/?challenge=${seed}`;
     if (navigator.share) {
       await navigator.share({ title: "Toon-Tone Daily", text, url: `https://toon-tone.net/?challenge=${seed}` });
       return;
@@ -158,102 +162,94 @@ export default function ToonToneGame() {
   }
 
   if (complete) {
-    const best = [...results].sort((a, b) => b.score - a.score)[0];
-    const weakest = [...results].sort((a, b) => a.score - b.score)[0];
     return (
-      <section className="rounded-[2rem] border-4 border-slate-950 bg-white p-4 shadow-[10px_10px_0_#0f172a] sm:p-6">
-        <div className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
-          <div className="rounded-3xl bg-amber-100 p-6 text-center">
-            <p className="text-sm font-black uppercase tracking-[0.24em] text-pink-600">Daily complete</p>
-            <h2 className="mt-3 text-6xl font-black">{finalScore}/10</h2>
-            <p className="mt-2 text-2xl font-black">{rating}</p>
-            <p className="mt-4 text-slate-700">Best: {best.characterName} · Hardest: {weakest.characterName}</p>
-            <canvas ref={canvasRef} width="700" height="540" className="mt-5 hidden w-full rounded-2xl border-2 border-slate-950 bg-white sm:block" />
-          </div>
-          <div>
-            <div className="grid gap-3">
-              {results.map((result, index) => (
-                <div key={result.questionId} className="flex items-center justify-between gap-3 rounded-2xl border-2 border-slate-200 p-3">
-                  <div>
-                    <p className="font-black">Round {index + 1}: {result.characterName}&apos;s {result.targetPart}</p>
-                    <p className="text-sm text-slate-600">ΔE {result.delta} · {result.feedback}</p>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="h-8 w-8 rounded-full border-2 border-slate-950" style={{ backgroundColor: result.playerHex }} />
-                    <span className="h-8 w-8 rounded-full border-2 border-slate-950" style={{ backgroundColor: result.targetHex }} />
-                    <strong>{result.score}</strong>
-                  </div>
-                </div>
-              ))}
+      <section className="mx-auto max-w-3xl rounded-3xl bg-white p-5 shadow-sm ring-1 ring-slate-200 sm:p-7">
+        <div className="text-center">
+          <p className="text-sm font-semibold text-slate-500">Daily complete</p>
+          <h2 className="mt-2 text-6xl font-black tracking-tight text-slate-950">{finalScore}/10</h2>
+          <p className="mt-2 text-xl font-bold text-slate-700">{rating}</p>
+          <canvas ref={canvasRef} width="700" height="540" className="mx-auto mt-5 hidden w-full max-w-md rounded-2xl border border-slate-200 bg-white sm:block" />
+        </div>
+        <div className="mt-6 space-y-2">
+          {results.map((result, index) => (
+            <div key={result.questionId} className="flex items-center justify-between gap-3 rounded-2xl bg-slate-50 p-3">
+              <div>
+                <p className="text-sm font-bold text-slate-900">{index + 1}. {result.characterName} · {result.targetPart}</p>
+                <p className="text-xs text-slate-500">ΔE {result.delta} · {result.feedback}</p>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="h-7 w-7 rounded-full ring-1 ring-slate-300" style={{ backgroundColor: result.playerHex }} />
+                <span className="h-7 w-7 rounded-full ring-1 ring-slate-300" style={{ backgroundColor: result.targetHex }} />
+                <strong>{result.score}</strong>
+              </div>
             </div>
-            <div className="mt-5 grid gap-3 sm:grid-cols-3">
-              <button onClick={share} className="rounded-full border-2 border-slate-950 bg-[#ff4f9a] px-4 py-3 font-black text-white shadow-[4px_4px_0_#0f172a]">{copied ? "Copied" : "Share"}</button>
-              <button onClick={downloadCard} className="rounded-full border-2 border-slate-950 bg-white px-4 py-3 font-black shadow-[4px_4px_0_#0f172a]">Download PNG</button>
-              <button onClick={restart} className="rounded-full border-2 border-slate-950 bg-[#06d6a0] px-4 py-3 font-black shadow-[4px_4px_0_#0f172a]">Play Again</button>
-            </div>
-          </div>
+          ))}
+        </div>
+        <div className="mt-6 grid gap-3 sm:grid-cols-3">
+          <button onClick={share} className="rounded-2xl bg-slate-950 px-4 py-3 font-bold text-white">{copied ? "Copied" : "Share"}</button>
+          <button onClick={downloadCard} className="rounded-2xl bg-slate-100 px-4 py-3 font-bold text-slate-950">PNG</button>
+          <button onClick={restart} className="rounded-2xl bg-pink-500 px-4 py-3 font-bold text-white">Play again</button>
         </div>
       </section>
     );
   }
 
   return (
-    <section className="rounded-[2rem] border-4 border-slate-950 bg-white p-4 shadow-[10px_10px_0_#0f172a] sm:p-6">
-      <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+    <section className="mx-auto max-w-5xl rounded-3xl bg-white p-4 shadow-sm ring-1 ring-slate-200 sm:p-6">
+      <div className="mb-5 flex items-center justify-between gap-3">
         <div>
-          <p className="text-sm font-black uppercase tracking-[0.24em] text-pink-600">Daily Challenge · {seed}</p>
-          <h1 className="mt-1 text-3xl font-black sm:text-5xl">Toon Tone Game</h1>
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Daily · {seed}</p>
+          <h1 className="mt-1 text-2xl font-black tracking-tight text-slate-950 sm:text-4xl">Toon Tone</h1>
         </div>
-        <div className="rounded-full border-2 border-slate-950 bg-amber-200 px-4 py-2 font-black">Round {roundIndex + 1}/5</div>
+        <div className="rounded-full bg-slate-100 px-4 py-2 text-sm font-bold text-slate-700">{roundIndex + 1}/5</div>
       </div>
 
-      <div className="grid gap-5 lg:grid-cols-[0.9fr_1.15fr_0.75fr]">
-        <div className="rounded-3xl bg-slate-950 p-5 text-white">
-          <p className="text-sm font-bold text-emerald-200">What color is...</p>
-          <h2 className="mt-3 text-3xl font-black leading-tight">{question.characterName}&apos;s {question.targetPart}?</h2>
-          <p className="mt-3 text-slate-300">from {question.sourceTitle}</p>
-          <p className="mt-5 rounded-2xl border border-white/20 p-3 text-sm text-slate-300">Memorize the highlighted abstract character part. The color flashes briefly, then hides. No official images are used.</p>
-          {!started && <button onClick={() => { setStarted(true); setFlashUntil(Date.now() + 1200); }} className="mt-5 w-full rounded-full border-2 border-white bg-[#06d6a0] px-5 py-3 font-black text-slate-950">Start Daily</button>}
-          {started && !locked && <button onClick={() => setFlashUntil(Date.now() + 1200)} className="mt-5 w-full rounded-full border-2 border-white bg-white px-5 py-3 font-black text-slate-950">Flash target again</button>}
+      <div className="grid gap-5 lg:grid-cols-[1fr_1fr] lg:items-start">
+        <div>
+          <div className="mb-3 rounded-2xl bg-slate-50 p-4">
+            <p className="text-sm font-semibold text-slate-500">What color is</p>
+            <h2 className="mt-1 text-2xl font-black leading-tight text-slate-950">{question.characterName}&apos;s {question.targetPart}?</h2>
+            <p className="mt-1 text-sm text-slate-500">{question.sourceTitle}</p>
+          </div>
+          <CharacterMemoryCard question={question} reveal={memorizing} playerHex={playerHex} locked={locked} />
         </div>
 
-        <div className="rounded-3xl bg-amber-100 p-5">
-          <div className="grid gap-4 sm:grid-cols-[0.86fr_1.14fr] sm:items-center">
-            <CharacterMemoryCard question={question} reveal={memorizing} playerHex={playerHex} locked={locked} />
-            <div className="space-y-4">
-              <div className="rounded-3xl border-2 border-slate-950 bg-white p-4">
-                <p className="text-sm font-black uppercase tracking-[0.18em] text-slate-500">Your color</p>
-                <div className="mt-3 h-20 rounded-2xl border-2 border-slate-950" style={{ backgroundColor: playerHex }} />
-              </div>
-              <Slider label="Hue" value={hsb.h} min={0} max={360} disabled={locked || !started} onChange={(value) => updateHsb("h", value)} gradient="linear-gradient(90deg,#f00,#ff0,#0f0,#0ff,#00f,#f0f,#f00)" />
-              <Slider label="Saturation" value={hsb.s} min={0} max={100} disabled={locked || !started} onChange={(value) => updateHsb("s", value)} gradient={`linear-gradient(90deg,#fff,${hsbToHex({ h: hsb.h, s: 100, b: hsb.b })})`} />
-              <Slider label="Brightness" value={hsb.b} min={0} max={100} disabled={locked || !started} onChange={(value) => updateHsb("b", value)} gradient={`linear-gradient(90deg,#000,${hsbToHex({ h: hsb.h, s: hsb.s, b: 100 })})`} />
+        <div className="space-y-4">
+          <div className="rounded-2xl bg-slate-50 p-4">
+            <div className="flex items-center justify-between gap-3">
+              <span className="text-sm font-semibold text-slate-500">Your color</span>
+              <span className="font-mono text-sm text-slate-500">{playerHex}</span>
             </div>
+            <div className="mt-3 h-16 rounded-2xl ring-1 ring-slate-200" style={{ backgroundColor: playerHex }} />
           </div>
-          <div className="mt-5 flex flex-wrap gap-3">
-            <button disabled={!started || locked || memorizing} onClick={submit} className="flex-1 rounded-full border-2 border-slate-950 bg-[#ff4f9a] px-5 py-3 font-black text-white shadow-[4px_4px_0_#0f172a] disabled:cursor-not-allowed disabled:opacity-40">Lock your guess</button>
-            <button disabled={!started || locked || usedHint} onClick={() => setUsedHint(true)} className="rounded-full border-2 border-slate-950 bg-white px-5 py-3 font-black shadow-[4px_4px_0_#0f172a] disabled:cursor-not-allowed disabled:opacity-40">Hint</button>
-          </div>
-          {usedHint && <p className="mt-3 text-sm font-bold text-slate-700">{hueHint(question.targetColorHex)}</p>}
-        </div>
 
-        <aside className="rounded-3xl border-2 border-slate-200 p-5">
-          <h3 className="text-xl font-black">Score</h3>
-          <p className="mt-1 text-sm text-slate-600">Average updates after each locked round.</p>
-          <div className="mt-4 text-5xl font-black">{results.length ? average(results) : "--"}</div>
+          <Slider label="Hue" value={hsb.h} min={0} max={360} disabled={locked || !started} onChange={(value) => updateHsb("h", value)} gradient="linear-gradient(90deg,#f00,#ff0,#0f0,#0ff,#00f,#f0f,#f00)" />
+          <Slider label="Saturation" value={hsb.s} min={0} max={100} disabled={locked || !started} onChange={(value) => updateHsb("s", value)} gradient={`linear-gradient(90deg,#fff,${hsbToHex({ h: hsb.h, s: 100, b: hsb.b })})`} />
+          <Slider label="Brightness" value={hsb.b} min={0} max={100} disabled={locked || !started} onChange={(value) => updateHsb("b", value)} gradient={`linear-gradient(90deg,#000,${hsbToHex({ h: hsb.h, s: hsb.s, b: 100 })})`} />
+
+          <div className="grid gap-3 sm:grid-cols-[1fr_auto]">
+            {!started ? (
+              <button onClick={startRound} className="rounded-2xl bg-slate-950 px-5 py-3 font-bold text-white">Start</button>
+            ) : (
+              <button disabled={locked || memorizing} onClick={submit} className="rounded-2xl bg-slate-950 px-5 py-3 font-bold text-white disabled:cursor-not-allowed disabled:opacity-40">Lock guess</button>
+            )}
+            <button disabled={!started || locked || usedHint} onClick={() => setUsedHint(true)} className="rounded-2xl bg-slate-100 px-5 py-3 font-bold text-slate-950 disabled:cursor-not-allowed disabled:opacity-40">Hint</button>
+          </div>
+          {started && !locked && <button onClick={() => setFlashUntil(Date.now() + 1100)} className="w-full rounded-2xl border border-slate-200 px-5 py-3 text-sm font-bold text-slate-700">Flash target again</button>}
+          {usedHint && <p className="text-sm font-medium text-slate-500">{hueHint(question.targetColorHex)}</p>}
+
           {currentResult && (
-            <div className="mt-5 space-y-3">
-              <p className="font-black">Round score: {currentResult.score}/10</p>
-              <div className="grid grid-cols-2 gap-3 text-center text-sm font-bold">
-                <div><div className="h-16 rounded-2xl border-2 border-slate-950" style={{ backgroundColor: currentResult.playerHex }} /><p className="mt-1">You</p></div>
-                <div><div className="h-16 rounded-2xl border-2 border-slate-950" style={{ backgroundColor: currentResult.targetHex }} /><p className="mt-1">Answer</p></div>
+            <div className="rounded-2xl bg-slate-50 p-4">
+              <div className="flex items-center justify-between">
+                <p className="font-bold text-slate-900">Round score</p>
+                <p className="text-3xl font-black text-slate-950">{currentResult.score}</p>
               </div>
-              <p className="text-sm text-slate-700">{currentResult.feedback}</p>
-              {roundIndex < questions.length - 1 && <button onClick={nextRound} className="w-full rounded-full border-2 border-slate-950 bg-[#06d6a0] px-4 py-3 font-black shadow-[4px_4px_0_#0f172a]">Next Round</button>}
-              {roundIndex === questions.length - 1 && <button onClick={() => setRoundIndex(roundIndex)} className="w-full rounded-full border-2 border-slate-950 bg-[#06d6a0] px-4 py-3 font-black shadow-[4px_4px_0_#0f172a]">View Results</button>}
+              <p className="mt-2 text-sm text-slate-600">{currentResult.feedback}</p>
+              {roundIndex < questions.length - 1 && <button onClick={nextRound} className="mt-4 w-full rounded-2xl bg-pink-500 px-5 py-3 font-bold text-white">Next</button>}
+              {roundIndex === questions.length - 1 && <button onClick={() => setRoundIndex(roundIndex)} className="mt-4 w-full rounded-2xl bg-pink-500 px-5 py-3 font-bold text-white">View result</button>}
             </div>
           )}
-        </aside>
+        </div>
       </div>
     </section>
   );
@@ -261,18 +257,9 @@ export default function ToonToneGame() {
 
 function Slider({ label, value, min, max, disabled, gradient, onChange }: { label: string; value: number; min: number; max: number; disabled: boolean; gradient: string; onChange: (value: number) => void }) {
   return (
-    <label className="block">
-      <span className="flex justify-between text-sm font-black"><span>{label}</span><span>{value}</span></span>
-      <input
-        className="mt-2 h-9 w-full cursor-pointer appearance-none rounded-full border-2 border-slate-950 bg-transparent px-1 disabled:cursor-not-allowed disabled:opacity-50"
-        style={{ background: gradient }}
-        type="range"
-        min={min}
-        max={max}
-        value={value}
-        disabled={disabled}
-        onChange={(event) => onChange(Number(event.target.value))}
-      />
+    <label className="block rounded-2xl bg-slate-50 p-4">
+      <span className="mb-2 flex justify-between text-sm font-semibold text-slate-700"><span>{label}</span><span>{value}</span></span>
+      <input className="h-7 w-full cursor-pointer appearance-none rounded-full border border-slate-200 disabled:cursor-not-allowed disabled:opacity-50" style={{ background: gradient }} type="range" min={min} max={max} value={value} disabled={disabled} onChange={(event) => onChange(Number(event.target.value))} />
     </label>
   );
 }
