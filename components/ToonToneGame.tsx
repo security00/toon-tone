@@ -32,6 +32,20 @@ function hueHint(targetHex: string) {
   return `Hint: this color leans ${hue}. Max score is now 9.`;
 }
 
+function perfectResults(questions: ReturnType<typeof getDailyQuestions>): RoundResult[] {
+  return questions.map((item) => ({
+    questionId: item.id,
+    characterName: item.characterName,
+    targetPart: item.targetPart,
+    playerHex: item.targetColorHex,
+    targetHex: item.targetColorHex,
+    score: 10,
+    delta: 0,
+    feedback: "Perfect match — your color memory was locked in.",
+    usedHint: false,
+  }));
+}
+
 export default function ToonToneGame() {
   const seed = todaySeed();
   const questions = useMemo(() => getDailyQuestions(seed), [seed]);
@@ -95,6 +109,22 @@ export default function ToonToneGame() {
     const timer = window.setInterval(() => setNow(Date.now()), 120);
     return () => window.clearInterval(timer);
   }, []);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("debug") !== "perfect") return;
+    const timer = window.setTimeout(() => {
+      setStarted(true);
+      setRoundIndex(questions.length - 1);
+      setHsb(hexToHsb(questions[questions.length - 1]?.targetColorHex ?? hsbToHex(defaultHsb)));
+      setLocked(true);
+      setUsedHint(false);
+      setFlashUntil(0);
+      setResults(perfectResults(questions));
+    }, 0);
+    return () => window.clearTimeout(timer);
+  }, [questions]);
 
   useEffect(() => {
     if (!complete) return;

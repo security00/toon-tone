@@ -62,8 +62,13 @@ export default function ColorMatchPanel({ hsb, playerHex, started, locked, memor
         )}
       </div>
 
-      <div className="absolute bottom-5 left-[142px] z-10 rounded-full bg-black/16 px-3 py-1 font-mono text-xs font-black uppercase tracking-wide text-white shadow-sm backdrop-blur-md">
-        {playerHex}
+      <div className="absolute bottom-5 left-[142px] z-10 space-y-2">
+        <div className="rounded-full bg-black/16 px-3 py-1 font-mono text-xs font-black uppercase tracking-wide text-white shadow-sm backdrop-blur-md">
+          {playerHex}
+        </div>
+        <div className="rounded-2xl bg-black/18 px-3 py-2 font-mono text-[11px] font-black uppercase tracking-wide text-white shadow-sm backdrop-blur-md">
+          H {hsb.h} · S {hsb.s} · B {hsb.b}
+        </div>
       </div>
     </div>
   );
@@ -74,6 +79,7 @@ function VerticalSlider({ label, value, min, max, disabled, gradient, onChange }
   return (
     <label className="relative h-[258px] w-4">
       <span className="absolute -bottom-6 left-1/2 -translate-x-1/2 text-[10px] font-black text-white/85">{label}</span>
+      <span className="absolute -top-7 left-1/2 -translate-x-1/2 rounded-full bg-black/18 px-1.5 py-0.5 font-mono text-[10px] font-black text-white shadow-sm backdrop-blur-md">{value}</span>
       <span className="absolute inset-0 rounded-full shadow-[inset_0_0_0_1px_rgba(255,255,255,0.38),0_10px_20px_rgba(15,23,42,0.12)]" style={{ background: gradient }} />
       <input
         className="absolute inset-0 z-10 h-full w-full cursor-pointer opacity-0 disabled:cursor-not-allowed"
