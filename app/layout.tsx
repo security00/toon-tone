@@ -15,9 +15,9 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://toon-tone.net"),
-  title: "Toon-Tone Game | Cartoon Color Guessing Challenge",
+  title: "Toon Tone Game | Cartoon Color Guessing Challenge",
   description:
-    "Play Toon-Tone, a free cartoon color guessing game. Match character colors from memory with Hue, Saturation, and Brightness sliders, then share your daily score.",
+    "Play Toon Tone, a free cartoon color guessing game. Match character colors from memory with Hue, Saturation, and Brightness sliders, then share your daily score.",
   keywords: [
     "toon tone game",
     "cartoon color guessing game",
@@ -27,10 +27,10 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/" },
   openGraph: {
-    title: "Toon-Tone Game",
+    title: "Toon Tone Game",
     description: "Guess cartoon character colors with HSB sliders and share your Daily Challenge score.",
     url: "https://toon-tone.net",
-    siteName: "Toon-Tone",
+    siteName: "Toon Tone",
     type: "website",
   },
 };

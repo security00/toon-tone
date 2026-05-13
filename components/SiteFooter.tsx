@@ -13,9 +13,9 @@ export default function SiteFooter() {
     <footer className="mt-12 border-t border-slate-200 bg-white/80 px-4 py-8 text-slate-700 sm:px-6 lg:px-8">
       <div className="mx-auto flex max-w-7xl flex-col gap-5 md:flex-row md:items-center md:justify-between">
         <div>
-          <Link href="/" className="text-xl font-black text-slate-950">Toon-Tone</Link>
+          <Link href="/" className="text-xl font-black text-slate-950">Toon Tone</Link>
           <p className="mt-2 max-w-2xl text-sm leading-6">
-            Free cartoon color memory game. For questions, feedback, or policy requests, contact{" "}
+            Toon Tone is a free cartoon color memory game. For questions, feedback, or policy requests, contact{" "}
             <a className="font-bold text-pink-600" href="mailto:support@toon-tone.net">support@toon-tone.net</a>.
           </p>
         </div>
@@ -26,7 +26,7 @@ export default function SiteFooter() {
         </nav>
       </div>
       <p className="mx-auto mt-5 max-w-7xl text-xs text-slate-500">
-        © {new Date().getFullYear()} Toon-Tone. Unofficial text-reference-only color guessing game.
+        © {new Date().getFullYear()} Toon Tone. Unofficial text-reference-only color guessing game.
       </p>
     </footer>
   );
