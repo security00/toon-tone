@@ -1,5 +1,2 @@
-import { redirect } from "next/navigation";
-
-export default function Page() {
-  redirect("/terms/");
-}
+export { metadata } from "../terms/page";
+export { default } from "../terms/page";
