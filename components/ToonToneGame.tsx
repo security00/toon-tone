@@ -72,37 +72,62 @@ export default function ToonToneGame() {
   const playerHsb = hexToHsb(playerHex);
   const targetHsb = question ? hexToHsb(question.targetColorHex) : defaultHsb;
 
-  const playTone = useCallback((frequency: number, duration = 0.08, type: OscillatorType = "sine", gainValue = 0.035) => {
+  const playTone = useCallback((frequency: number, duration = 0.08, type: OscillatorType = "sine", gainValue = 0.035, delay = 0) => {
     if (typeof window === "undefined") return;
     const AudioContextCtor = window.AudioContext || (window as typeof window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
     if (!AudioContextCtor) return;
     const context = audioRef.current ?? new AudioContextCtor();
     audioRef.current = context;
+    const startAt = context.currentTime + delay;
     const oscillator = context.createOscillator();
     const gain = context.createGain();
     oscillator.type = type;
-    oscillator.frequency.setValueAtTime(frequency, context.currentTime);
-    gain.gain.setValueAtTime(gainValue, context.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.0001, context.currentTime + duration);
+    oscillator.frequency.setValueAtTime(frequency, startAt);
+    gain.gain.setValueAtTime(0.0001, startAt);
+    gain.gain.exponentialRampToValueAtTime(gainValue, startAt + 0.012);
+    gain.gain.exponentialRampToValueAtTime(0.0001, startAt + duration);
     oscillator.connect(gain);
     gain.connect(context.destination);
-    oscillator.start();
-    oscillator.stop(context.currentTime + duration);
+    oscillator.start(startAt);
+    oscillator.stop(startAt + duration + 0.02);
   }, []);
 
   const playScoreSound = useCallback((score: number) => {
     if (score >= 8) {
-      playTone(660, 0.09, "triangle", 0.045);
-      window.setTimeout(() => playTone(880, 0.12, "triangle", 0.04), 90);
+      playTone(523, 0.11, "triangle", 0.07);
+      playTone(659, 0.12, "triangle", 0.065, 0.09);
+      playTone(784, 0.16, "triangle", 0.065, 0.18);
+      playTone(1047, 0.22, "sine", 0.05, 0.3);
       return;
     }
     if (score >= 5) {
-      playTone(440, 0.1, "sine", 0.035);
-      window.setTimeout(() => playTone(554, 0.08, "sine", 0.03), 95);
+      playTone(392, 0.1, "triangle", 0.045);
+      playTone(494, 0.12, "triangle", 0.042, 0.11);
       return;
     }
-    playTone(220, 0.16, "sawtooth", 0.025);
-    window.setTimeout(() => playTone(165, 0.18, "sawtooth", 0.02), 120);
+    playTone(196, 0.18, "sawtooth", 0.055);
+    playTone(147, 0.24, "sawtooth", 0.05, 0.14);
+    playTone(98, 0.32, "square", 0.035, 0.34);
+  }, [playTone]);
+
+  const playFinalSound = useCallback((score: number) => {
+    if (score >= 8) {
+      playTone(523, 0.13, "triangle", 0.07);
+      playTone(659, 0.13, "triangle", 0.07, 0.1);
+      playTone(784, 0.16, "triangle", 0.07, 0.2);
+      playTone(1047, 0.28, "sine", 0.06, 0.34);
+      playTone(1319, 0.34, "sine", 0.045, 0.52);
+      return;
+    }
+    if (score >= 5) {
+      playTone(330, 0.12, "triangle", 0.05);
+      playTone(440, 0.16, "triangle", 0.048, 0.14);
+      playTone(554, 0.2, "sine", 0.04, 0.31);
+      return;
+    }
+    playTone(220, 0.2, "sawtooth", 0.06);
+    playTone(165, 0.26, "sawtooth", 0.055, 0.18);
+    playTone(110, 0.38, "square", 0.04, 0.42);
   }, [playTone]);
 
   useEffect(() => {
@@ -128,10 +153,11 @@ export default function ToonToneGame() {
 
   useEffect(() => {
     if (!complete) return;
+    playFinalSound(finalScore);
     const entry = { seed, score: finalScore, rating, completedAt: new Date().toISOString() };
     const existing = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]") as typeof entry[];
     localStorage.setItem(STORAGE_KEY, JSON.stringify([entry, ...existing.filter((item) => item.seed !== seed)].slice(0, 30)));
-  }, [complete, finalScore, rating, seed]);
+  }, [complete, finalScore, playFinalSound, rating, seed]);
 
   useEffect(() => {
     if (!complete || !canvasRef.current) return;
