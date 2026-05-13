@@ -6,6 +6,18 @@ export const metadata: Metadata = {
   title: "About Us | Toon-Tone",
   description: "Learn about Toon-Tone, a free unofficial cartoon color memory game built around text references and HSB color sliders.",
   alternates: { canonical: "/about/" },
+  openGraph: {
+    title: "About Us | Toon-Tone",
+    description: "Learn about Toon-Tone, a free unofficial cartoon color memory game built around text references and HSB color sliders.",
+    url: "https://toon-tone.net/about/",
+    siteName: "Toon Tone",
+    type: "website",
+  },
+  twitter: {
+    card: "summary",
+    title: "About Us | Toon-Tone",
+    description: "Learn about Toon-Tone, a free unofficial cartoon color memory game built around text references and HSB color sliders.",
+  },
 };
 
 export default function Page() {

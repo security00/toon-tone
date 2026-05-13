@@ -1,5 +1,25 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import SiteFooter from "@/components/SiteFooter";
+
+export const metadata: Metadata = {
+  title: "Leaderboard | Toon Tone",
+  description: "View Toon Tone leaderboard plans and local score history for the daily cartoon color guessing game.",
+  alternates: { canonical: "/leaderboard/" },
+  openGraph: {
+    title: "Leaderboard | Toon Tone",
+    description: "View Toon Tone leaderboard plans and local score history for the daily cartoon color guessing game.",
+    url: "https://toon-tone.net/leaderboard/",
+    siteName: "Toon Tone",
+    type: "website",
+  },
+  twitter: {
+    card: "summary",
+    title: "Leaderboard | Toon Tone",
+    description: "View Toon Tone leaderboard plans and local score history for the daily cartoon color guessing game.",
+  },
+};
+
 export default function Page() {
   return (
     <main className="min-h-screen bg-[#fff7ed] px-6 py-10 text-slate-950">

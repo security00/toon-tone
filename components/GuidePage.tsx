@@ -21,6 +21,18 @@ export function guideMetadata(title: string, description: string, canonical: str
     title,
     description,
     alternates: { canonical },
+    openGraph: {
+      title,
+      description,
+      url: `https://toon-tone.net${canonical}`,
+      siteName: "Toon Tone",
+      type: "article",
+    },
+    twitter: {
+      card: "summary",
+      title,
+      description,
+    },
   };
 }
 

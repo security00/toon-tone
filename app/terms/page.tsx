@@ -6,6 +6,18 @@ export const metadata: Metadata = {
   title: "Terms of Use | Toon-Tone",
   description: "Read the Toon-Tone Terms of Use for the unofficial cartoon color memory game.",
   alternates: { canonical: "/terms/" },
+  openGraph: {
+    title: "Terms of Use | Toon-Tone",
+    description: "Read the Toon-Tone Terms of Use for the unofficial cartoon color memory game.",
+    url: "https://toon-tone.net/terms/",
+    siteName: "Toon Tone",
+    type: "website",
+  },
+  twitter: {
+    card: "summary",
+    title: "Terms of Use | Toon-Tone",
+    description: "Read the Toon-Tone Terms of Use for the unofficial cartoon color memory game.",
+  },
 };
 
 export default function Page() {

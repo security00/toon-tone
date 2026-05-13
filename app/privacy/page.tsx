@@ -6,6 +6,18 @@ export const metadata: Metadata = {
   title: "Privacy Policy | Toon-Tone",
   description: "Read the Toon-Tone Privacy Policy, including local browser storage, contact information, and future analytics notices.",
   alternates: { canonical: "/privacy/" },
+  openGraph: {
+    title: "Privacy Policy | Toon-Tone",
+    description: "Read the Toon-Tone Privacy Policy, including local browser storage, contact information, and future analytics notices.",
+    url: "https://toon-tone.net/privacy/",
+    siteName: "Toon Tone",
+    type: "website",
+  },
+  twitter: {
+    card: "summary",
+    title: "Privacy Policy | Toon-Tone",
+    description: "Read the Toon-Tone Privacy Policy, including local browser storage, contact information, and future analytics notices.",
+  },
 };
 
 export default function Page() {
