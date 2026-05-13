@@ -1,5 +1,6 @@
 import Link from "next/link";
 import ToonToneGame from "./ToonToneGame";
+import SiteFooter from "./SiteFooter";
 
 export default function SeoGamePage({ title, intro }: { title: string; intro: string }) {
   return (
@@ -21,6 +22,7 @@ export default function SeoGamePage({ title, intro }: { title: string; intro: st
           </ol>
         </section>
       </div>
+      <SiteFooter />
     </main>
   );
 }

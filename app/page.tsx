@@ -1,5 +1,6 @@
 import Link from "next/link";
 import ToonToneGame from "@/components/ToonToneGame";
+import SiteFooter from "@/components/SiteFooter";
 import { QUESTIONS } from "@/lib/questions";
 
 export default function Home() {
@@ -11,7 +12,9 @@ export default function Home() {
           <div className="hidden items-center gap-3 text-sm font-bold sm:flex">
             <Link href="/toon-tone-game/">How to play</Link>
             <Link href="/leaderboard/">Leaderboard</Link>
-            <Link href="/about/">About</Link>
+            <Link href="/about/">About Us</Link>
+            <Link href="/privacy/">Privacy</Link>
+            <Link href="/terms/">Terms</Link>
           </div>
         </nav>
 
@@ -66,6 +69,7 @@ export default function Home() {
           </div>
         </section>
       </div>
+      <SiteFooter />
     </main>
   );
 }

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import SiteFooter from "@/components/SiteFooter";
 export default function Page() {
   return (
     <main className="min-h-screen bg-[#fff7ed] px-6 py-10 text-slate-950">
@@ -7,6 +8,7 @@ export default function Page() {
         <h1 className="mt-4 text-4xl font-black">Leaderboard</h1>
         <p className="mt-4 leading-8 text-slate-700">The public leaderboard is planned for the next phase. For the MVP, Toon-Tone stores recent scores locally and focuses on share cards so you can challenge friends without creating an account.</p>
       </div>
+      <SiteFooter />
     </main>
   );
 }

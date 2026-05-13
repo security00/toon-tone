@@ -20,7 +20,7 @@ const routes = [
 export default function sitemap(): MetadataRoute.Sitemap {
   return routes.map((route) => ({
     url: `https://toon-tone.net${route}`,
-    lastModified: "2026-05-12",
+    lastModified: "2026-05-13",
     changeFrequency: route === "" ? "daily" : "weekly",
     priority: route === "" ? 1 : 0.7,
   }));
