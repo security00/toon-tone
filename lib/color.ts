@@ -118,15 +118,46 @@ export function ratingFromAverage(score: number): string {
   return "Needs a Rewatch";
 }
 
+function hueFamily(hue: number): string {
+  if (hue < 20 || hue >= 345) return "red";
+  if (hue < 45) return "orange-red";
+  if (hue < 75) return "yellow";
+  if (hue < 155) return "green";
+  if (hue < 195) return "cyan";
+  if (hue < 255) return "blue";
+  if (hue < 285) return "purple";
+  if (hue < 345) return "pink/magenta";
+  return "color";
+}
+
 export function feedbackForGuess(playerHex: string, targetHex: string): string {
   const guess = hexToHsb(playerHex);
   const target = hexToHsb(targetHex);
-  const hueDiff = Math.abs((((guess.h - target.h + 540) % 360) - 180));
+  const hueShift = ((guess.h - target.h + 540) % 360) - 180;
+  const hueDiff = Math.abs(hueShift);
   const saturationDiff = guess.s - target.s;
   const brightnessDiff = guess.b - target.b;
 
-  if (hueDiff > 22) return guess.h > target.h ? "Your hue drifted cooler/warmer than the memory target." : "Your hue landed in a different color family.";
-  if (Math.abs(saturationDiff) > 16) return saturationDiff > 0 ? "Your guess was more saturated than the target." : "Your guess was duller than the target.";
-  if (Math.abs(brightnessDiff) > 14) return brightnessDiff > 0 ? "Your guess was brighter than the target." : "Your guess was darker than the target.";
+  const misses = [
+    { key: "hue", weight: hueDiff / 22 },
+    { key: "saturation", weight: Math.abs(saturationDiff) / 16 },
+    { key: "brightness", weight: Math.abs(brightnessDiff) / 14 },
+  ].sort((a, b) => b.weight - a.weight);
+
+  switch (misses[0]?.key) {
+    case "hue":
+      if (hueDiff > 22) return `Your hue aimed closer to ${hueFamily(guess.h)}; the target sits nearer ${hueFamily(target.h)}.`;
+      break;
+    case "saturation":
+      if (Math.abs(saturationDiff) > 16) return saturationDiff > 0 ? "Your guess was too vivid; lower saturation next time." : "Your guess was too muted; push saturation higher.";
+      break;
+    case "brightness":
+      if (Math.abs(brightnessDiff) > 14) return brightnessDiff > 0 ? "Your guess was too bright; darken the value next time." : "Your guess was too dark; lift brightness next time.";
+      break;
+  }
+
+  if (hueDiff > 22) return `Your hue aimed closer to ${hueFamily(guess.h)}; the target sits nearer ${hueFamily(target.h)}.`;
+  if (Math.abs(saturationDiff) > 16) return saturationDiff > 0 ? "Your guess was too vivid; lower saturation next time." : "Your guess was too muted; push saturation higher.";
+  if (Math.abs(brightnessDiff) > 14) return brightnessDiff > 0 ? "Your guess was too bright; darken the value next time." : "Your guess was too dark; lift brightness next time.";
   return "Very close — your color memory was locked in.";
 }
