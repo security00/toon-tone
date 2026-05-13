@@ -94,10 +94,11 @@ export default function ToonToneGame() {
 
   const playScoreSound = useCallback((score: number) => {
     if (score >= 8) {
-      playTone(523, 0.11, "triangle", 0.07);
-      playTone(659, 0.12, "triangle", 0.065, 0.09);
-      playTone(784, 0.16, "triangle", 0.065, 0.18);
-      playTone(1047, 0.22, "sine", 0.05, 0.3);
+      playTone(523, 0.1, "triangle", 0.07);
+      playTone(659, 0.1, "triangle", 0.066, 0.08);
+      playTone(784, 0.12, "triangle", 0.064, 0.16);
+      playTone(1047, 0.18, "sine", 0.055, 0.27);
+      playTone(1319, 0.16, "sine", 0.035, 0.39);
       return;
     }
     if (score >= 5) {
@@ -112,11 +113,14 @@ export default function ToonToneGame() {
 
   const playFinalSound = useCallback((score: number) => {
     if (score >= 8) {
-      playTone(523, 0.13, "triangle", 0.07);
-      playTone(659, 0.13, "triangle", 0.07, 0.1);
-      playTone(784, 0.16, "triangle", 0.07, 0.2);
-      playTone(1047, 0.28, "sine", 0.06, 0.34);
-      playTone(1319, 0.34, "sine", 0.045, 0.52);
+      playTone(523, 0.12, "triangle", 0.075);
+      playTone(659, 0.12, "triangle", 0.072, 0.09);
+      playTone(784, 0.13, "triangle", 0.07, 0.18);
+      playTone(1047, 0.22, "sine", 0.064, 0.3);
+      playTone(1319, 0.18, "sine", 0.046, 0.45);
+      playTone(1568, 0.16, "sine", 0.038, 0.58);
+      playTone(1047, 0.3, "triangle", 0.048, 0.72);
+      playTone(1319, 0.28, "sine", 0.032, 0.76);
       return;
     }
     if (score >= 5) {
