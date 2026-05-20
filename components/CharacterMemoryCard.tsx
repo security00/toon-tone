@@ -29,27 +29,25 @@ export default function CharacterMemoryCard({ question, reveal, playerHex, locke
         <span>{question.targetPart}</span>
       </div>
 
-      <div className="relative flex aspect-square min-h-[360px] w-full items-center justify-center overflow-hidden bg-slate-50 p-6">
-        <div className="absolute inset-0 bg-[linear-gradient(135deg,#f8fafc_0%,#eef2ff_48%,#fff1f2_100%)]" />
-        <div className="absolute inset-0 opacity-45 [background-image:linear-gradient(45deg,#cbd5e1_25%,transparent_25%),linear-gradient(-45deg,#cbd5e1_25%,transparent_25%),linear-gradient(45deg,transparent_75%,#cbd5e1_75%),linear-gradient(-45deg,transparent_75%,#cbd5e1_75%)] [background-position:0_0,0_12px,12px_-12px,-12px_0px] [background-size:24px_24px]" />
+      <div className="relative aspect-square min-h-[360px] w-full overflow-hidden transition-colors duration-200" style={{ backgroundColor: displayHex }}>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_72%_18%,rgba(255,255,255,0.34),transparent_30%),linear-gradient(135deg,rgba(255,255,255,0.22),rgba(15,23,42,0.12))]" />
 
-        <div className="relative grid h-full w-full place-items-center rounded-[1.7rem] bg-white/72 p-5 shadow-[inset_0_0_0_1px_rgba(148,163,184,0.35)] backdrop-blur-md">
-          <div
-            className="grid h-[min(78vw,280px)] w-[min(78vw,280px)] place-items-center rounded-[2rem] shadow-[0_24px_60px_rgba(15,23,42,0.18)] ring-8 ring-white/80 transition-colors duration-200"
-            style={{ backgroundColor: displayHex }}
-          >
-            {!showTarget && (
-              <div className="grid h-32 w-32 place-items-center rounded-full bg-white/32 text-center shadow-[inset_0_0_0_1px_rgba(255,255,255,0.38)] backdrop-blur-md">
-                <div>
-                  <p className="text-xs font-black uppercase tracking-[0.18em] text-slate-700/80">hidden</p>
-                  <p className="mt-1 text-sm font-black text-slate-800/80">match from memory</p>
-                </div>
-              </div>
-            )}
+        <div className="relative flex h-full w-full flex-col justify-between p-6">
+          <div className="flex justify-end">
+            <SwatchStripe color={displayHex} label={showTarget ? question.targetColorHex : "Your current color"} />
           </div>
 
-          <div className="absolute bottom-5 left-5 right-5 flex flex-wrap items-center justify-between gap-2">
-            <SwatchStripe color={displayHex} label={showTarget ? question.targetColorHex : "Your current color"} />
+          {!showTarget && (
+            <div className="grid self-center rounded-3xl bg-white/30 px-8 py-6 text-center shadow-[inset_0_0_0_1px_rgba(255,255,255,0.38),0_18px_44px_rgba(15,23,42,0.18)] backdrop-blur-md">
+              <p className="text-xs font-black uppercase tracking-[0.24em] text-slate-800/80">hidden</p>
+              <p className="mt-2 text-lg font-black text-slate-900/80">match from memory</p>
+            </div>
+          )}
+
+          <div className="flex min-h-10 flex-wrap items-end justify-between gap-2">
+            <div className="rounded-2xl bg-white/24 px-4 py-3 text-sm font-black text-slate-900/80 shadow-sm backdrop-blur-md">
+              {question.characterName} · {question.targetPart}
+            </div>
             {showTarget && <SwatchStripe color={question.targetColorHex} label={`H${targetHsb.h} S${targetHsb.s} B${targetHsb.b}`} />}
           </div>
         </div>
