@@ -1,4 +1,5 @@
 name = "toon-tone"
+main = "src/worker.ts"
 compatibility_date = "2026-05-12"
 account_id = "faae494a756090f5f9c0ad7b8d1ddb88"
 routes = [
@@ -8,4 +9,6 @@ routes = [
 
 [assets]
 directory = "./out"
+binding = "ASSETS"
+run_worker_first = true
 not_found_handling = "single-page-application"
