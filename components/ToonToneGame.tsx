@@ -310,40 +310,49 @@ export default function ToonToneGame() {
       <div className="mb-4 text-center sm:mb-6">
         <p className="text-sm font-bold text-slate-500">Toon Tone · {roundIndex + 1}/5</p>
         <h1 className="mx-auto mt-2 max-w-4xl text-2xl font-black leading-tight tracking-tight text-slate-950 sm:text-5xl">
-          What is the color of <span className="bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 bg-clip-text text-transparent">{question.characterName}&apos;s {question.targetPart}</span>?
+          <span className="sm:hidden">Match </span>
+          <span className="hidden sm:inline">What is the color of </span>
+          <span className="bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 bg-clip-text text-transparent">{question.characterName}&apos;s {question.targetPart}</span>
+          <span className="hidden sm:inline">?</span>
         </h1>
         <p className="mt-2 text-sm font-medium text-slate-500">from {question.sourceTitle}</p>
       </div>
 
-      <div className="grid gap-4 lg:grid-cols-[1fr_1fr] lg:items-stretch">
-        <CharacterMemoryCard question={question} reveal={memorizing} playerHex={playerHex} locked={locked} />
+      <div className="grid min-w-0 gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-stretch">
+        <div className="min-w-0">
+          <CharacterMemoryCard question={question} reveal={memorizing} playerHex={playerHex} locked={locked} />
+        </div>
         {currentResult ? (
-          <RoundResultPanel
-            progress={`${roundIndex + 1}/5`}
-            playerHex={currentResult.playerHex}
-            targetHex={currentResult.targetHex}
-            score={currentResult.score}
-            feedback={currentResult.score >= 8 ? "Great eye!" : currentResult.score >= 5 ? "Nice try!" : "Tough one!"}
-            playerLabel={`H${playerHsb.h} S${playerHsb.s} B${playerHsb.b}`}
-            targetLabel={`H${targetHsb.h} S${targetHsb.s} B${targetHsb.b}`}
-            isLastRound={roundIndex === questions.length - 1}
-            onNext={nextRound}
-            onFinish={() => setRoundIndex(roundIndex)}
-          />
+          <div className="min-w-0">
+            <RoundResultPanel
+              progress={`${roundIndex + 1}/5`}
+              playerHex={currentResult.playerHex}
+              targetHex={currentResult.targetHex}
+              score={currentResult.score}
+              feedback={currentResult.score >= 8 ? "Great eye!" : currentResult.score >= 5 ? "Nice try!" : "Tough one!"}
+              playerLabel={`H${playerHsb.h} S${playerHsb.s} B${playerHsb.b}`}
+              targetLabel={`H${targetHsb.h} S${targetHsb.s} B${targetHsb.b}`}
+              isLastRound={roundIndex === questions.length - 1}
+              onNext={nextRound}
+              onFinish={() => setRoundIndex(roundIndex)}
+            />
+          </div>
         ) : (
-          <ColorMatchPanel
-            hsb={hsb}
-            playerHex={playerHex}
-            started={started}
-            locked={locked}
-            memorizing={memorizing}
-            usedHint={usedHint}
-            progress={`${roundIndex + 1}/5`}
-            onChange={updateHsb}
-            onStart={startRound}
-            onSubmit={submit}
-            onHint={() => setUsedHint(true)}
-          />
+          <div className="min-w-0">
+            <ColorMatchPanel
+              hsb={hsb}
+              playerHex={playerHex}
+              started={started}
+              locked={locked}
+              memorizing={memorizing}
+              usedHint={usedHint}
+              progress={`${roundIndex + 1}/5`}
+              onChange={updateHsb}
+              onStart={startRound}
+              onSubmit={submit}
+              onHint={() => setUsedHint(true)}
+            />
+          </div>
         )}
       </div>
 

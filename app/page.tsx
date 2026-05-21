@@ -42,18 +42,18 @@ export default function Home() {
     <main className="min-h-screen bg-slate-100 px-3 py-4 text-slate-950 sm:px-6 sm:py-5 lg:px-8">
       <JsonLd data={webApplicationJsonLd} />
       <JsonLd data={faqJsonLd} />
-      <div className="mx-auto max-w-7xl">
-        <nav className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <div className="mx-auto w-full max-w-[366px] sm:max-w-7xl">
+        <nav className="mb-4 flex min-w-0 flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <Link href="/" className="text-2xl font-black tracking-tight">Toon-Tone</Link>
-          <div className="flex gap-3 overflow-x-auto pb-1 text-sm font-bold [-webkit-overflow-scrolling:touch] sm:items-center sm:overflow-visible sm:pb-0">
-            <Link href="/toon-tone-game" className="whitespace-nowrap">How to play</Link>
-            <Link href="/anime-color-guessing-game" className="whitespace-nowrap">Anime</Link>
-            <Link href="/faq" className="whitespace-nowrap">FAQ</Link>
-            <Link href="/how-to-play" className="whitespace-nowrap">Guide</Link>
-            <Link href="/leaderboard" className="whitespace-nowrap">Leaderboard</Link>
-            <Link href="/about" className="whitespace-nowrap">About Us</Link>
-            <Link href="/privacy" className="whitespace-nowrap">Privacy</Link>
-            <Link href="/terms" className="whitespace-nowrap">Terms</Link>
+          <div className="grid w-full min-w-0 grid-cols-2 gap-2 text-center text-xs font-black sm:flex sm:w-auto sm:flex-wrap sm:items-center sm:gap-3 sm:text-left sm:text-sm">
+            <Link href="/toon-tone-game" className="rounded-full bg-white px-3 py-1.5 shadow-sm ring-1 ring-slate-200 sm:bg-transparent sm:p-0 sm:shadow-none sm:ring-0">How to play</Link>
+            <Link href="/anime-color-guessing-game" className="rounded-full bg-white px-3 py-1.5 shadow-sm ring-1 ring-slate-200 sm:bg-transparent sm:p-0 sm:shadow-none sm:ring-0">Anime</Link>
+            <Link href="/faq" className="rounded-full bg-white px-3 py-1.5 shadow-sm ring-1 ring-slate-200 sm:bg-transparent sm:p-0 sm:shadow-none sm:ring-0">FAQ</Link>
+            <Link href="/how-to-play" className="rounded-full bg-white px-3 py-1.5 shadow-sm ring-1 ring-slate-200 sm:bg-transparent sm:p-0 sm:shadow-none sm:ring-0">Guide</Link>
+            <Link href="/leaderboard" className="hidden rounded-full bg-white px-3 py-1.5 shadow-sm ring-1 ring-slate-200 sm:inline sm:bg-transparent sm:p-0 sm:shadow-none sm:ring-0">Leaderboard</Link>
+            <Link href="/about" className="hidden rounded-full bg-white px-3 py-1.5 shadow-sm ring-1 ring-slate-200 sm:inline sm:bg-transparent sm:p-0 sm:shadow-none sm:ring-0">About</Link>
+            <Link href="/privacy" className="hidden rounded-full bg-white px-3 py-1.5 shadow-sm ring-1 ring-slate-200 sm:inline sm:bg-transparent sm:p-0 sm:shadow-none sm:ring-0">Privacy</Link>
+            <Link href="/terms" className="hidden rounded-full bg-white px-3 py-1.5 shadow-sm ring-1 ring-slate-200 sm:inline sm:bg-transparent sm:p-0 sm:shadow-none sm:ring-0">Terms</Link>
           </div>
         </nav>
 
