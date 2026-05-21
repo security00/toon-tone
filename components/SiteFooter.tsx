@@ -3,6 +3,8 @@ import Link from "next/link";
 const footerLinks = [
   { href: "/play", label: "Play" },
   { href: "/daily", label: "Daily" },
+  { href: "/anime-color-guessing-game", label: "Anime" },
+  { href: "/faq", label: "FAQ" },
   { href: "/leaderboard", label: "Leaderboard" },
   { href: "/about", label: "About Us" },
   { href: "/privacy", label: "Privacy Policy" },

@@ -47,6 +47,8 @@ export default function Home() {
           <Link href="/" className="text-2xl font-black tracking-tight">Toon-Tone</Link>
           <div className="hidden items-center gap-3 text-sm font-bold sm:flex">
             <Link href="/toon-tone-game">How to play</Link>
+            <Link href="/anime-color-guessing-game">Anime</Link>
+            <Link href="/faq">FAQ</Link>
             <Link href="/how-to-play">Guide</Link>
             <Link href="/leaderboard">Leaderboard</Link>
             <Link href="/about">About Us</Link>
@@ -148,6 +150,8 @@ export default function Home() {
           <div className="mt-4 grid gap-4 md:grid-cols-3">
             {[
               ["How to play", "/how-to-play", "A simple walkthrough for the daily Toon Tone challenge."],
+              ["Toon Tone Anime", "/anime-color-guessing-game", "Play anime-inspired color memory rounds with HSB sliders."],
+              ["FAQ", "/faq", "Answers for Toon Tone gameplay, scoring, safety, and mobile use."],
               ["Improve color memory", "/how-to-get-better-at-color-memory", "Practical tips for reading hue, saturation, and brightness."],
               ["Scoring guide", "/how-toon-tone-scoring-works", "Understand how each guess turns into a score."],
             ].map(([title, href, body]) => (

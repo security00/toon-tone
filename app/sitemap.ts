@@ -11,6 +11,7 @@ const routes = [
   "/guess-cartoon-character-color",
   "/character-color-game",
   "/anime-color-guessing-game",
+  "/faq",
   "/leaderboard",
   "/how-to-play",
   "/how-to-get-better-at-color-memory",

@@ -24,7 +24,7 @@ const relatedLinks = [
   ["Cartoon Color Guessing Game", "/cartoon-color-guessing-game"],
   ["Guess Cartoon Character Color", "/guess-cartoon-character-color"],
   ["Character Color Game", "/character-color-game"],
-  ["Anime Color Guessing Game", "/anime-color-guessing-game"],
+  ["Toon Tone Anime", "/anime-color-guessing-game"],
 ];
 
 export function seoGameMetadata(title: string, description: string, canonical: string): Metadata {
