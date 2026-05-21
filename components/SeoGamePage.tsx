@@ -70,18 +70,18 @@ export default function SeoGamePage({ title, intro, canonical, sections, tips, f
   };
 
   return (
-    <main className="min-h-screen bg-[linear-gradient(135deg,#fff7ed,#fef3c7,#fce7f3)] px-4 py-5 text-slate-950 sm:px-6 lg:px-8">
+    <main className="min-h-screen bg-[linear-gradient(135deg,#fff7ed,#fef3c7,#fce7f3)] px-3 py-4 text-slate-950 sm:px-6 sm:py-5 lg:px-8">
       <JsonLd data={webPageJsonLd} />
       <JsonLd data={faqJsonLd} />
       <div className="mx-auto max-w-7xl">
-        <nav className="mb-4 flex items-center justify-between">
+        <nav className="mb-4 flex items-center justify-between gap-3">
           <Link href="/" className="text-2xl font-black">Toon-Tone</Link>
-          <Link href="/" className="rounded-full border-2 border-slate-950 bg-white px-4 py-2 text-sm font-black shadow-[4px_4px_0_#0f172a]">Play Daily</Link>
+          <Link href="/" className="rounded-full border-2 border-slate-950 bg-white px-3 py-2 text-sm font-black shadow-[3px_3px_0_#0f172a] sm:px-4 sm:shadow-[4px_4px_0_#0f172a]">Play Daily</Link>
         </nav>
         <ToonToneGame />
-        <article className="mt-10 rounded-[2rem] border-4 border-slate-950 bg-white p-6 shadow-[8px_8px_0_#0f172a] md:p-8">
-          <p className="text-sm font-black uppercase tracking-[0.24em] text-pink-600">Toon Tone topic page</p>
-          <h1 className="text-4xl font-black md:text-5xl">{title}</h1>
+        <article className="mt-8 rounded-2xl border-2 border-slate-950 bg-white p-4 shadow-[4px_4px_0_#0f172a] sm:mt-10 sm:rounded-[2rem] sm:border-4 sm:p-6 sm:shadow-[8px_8px_0_#0f172a] md:p-8">
+          <p className="text-xs font-black uppercase tracking-[0.18em] text-pink-600 sm:text-sm sm:tracking-[0.24em]">Toon Tone topic page</p>
+          <h1 className="mt-2 text-3xl font-black leading-tight md:text-5xl">{title}</h1>
           <p className="mt-4 max-w-3xl text-lg leading-8 text-slate-700">{intro}</p>
 
           <h2 className="mt-8 text-2xl font-black">How to play</h2>
@@ -93,18 +93,18 @@ export default function SeoGamePage({ title, intro, canonical, sections, tips, f
 
           <div className="mt-8 grid gap-5 lg:grid-cols-2">
             {sections.map((section) => (
-              <section key={section.title} className="rounded-3xl bg-slate-50 p-5 ring-1 ring-slate-200">
-                <h2 className="text-2xl font-black">{section.title}</h2>
+              <section key={section.title} className="rounded-2xl bg-slate-50 p-4 ring-1 ring-slate-200 sm:rounded-3xl sm:p-5">
+                <h2 className="text-xl font-black sm:text-2xl">{section.title}</h2>
                 <p className="mt-3 leading-8 text-slate-700">{section.body}</p>
               </section>
             ))}
           </div>
 
-          <section className="mt-8 rounded-3xl bg-slate-950 p-6 text-white">
+          <section className="mt-8 rounded-2xl bg-slate-950 p-4 text-white sm:rounded-3xl sm:p-6">
             <h2 className="text-2xl font-black">Practical tips</h2>
             <ul className="mt-4 grid gap-3 md:grid-cols-2">
               {tips.map((tip) => (
-                <li key={tip} className="rounded-2xl bg-white/10 p-4 leading-7">• {tip}</li>
+                <li key={tip} className="rounded-xl bg-white/10 p-4 leading-7 sm:rounded-2xl">• {tip}</li>
               ))}
             </ul>
           </section>

@@ -47,20 +47,20 @@ export default function Page() {
   };
 
   return (
-    <main className="min-h-screen bg-[#fff7ed] px-6 py-10 text-slate-950">
+    <main className="min-h-screen bg-[#fff7ed] px-3 py-4 text-slate-950 sm:px-6 sm:py-10">
       <JsonLd data={faqJsonLd} />
-      <article className="mx-auto max-w-4xl rounded-[2rem] border-4 border-slate-950 bg-white p-6 shadow-[8px_8px_0_#0f172a] md:p-8">
+      <article className="mx-auto max-w-4xl rounded-2xl border-2 border-slate-950 bg-white p-4 shadow-[4px_4px_0_#0f172a] sm:rounded-[2rem] sm:border-4 sm:p-6 sm:shadow-[8px_8px_0_#0f172a] md:p-8">
         <Link href="/" className="font-black text-pink-600">Play Toon Tone</Link>
-        <p className="mt-6 text-sm font-black uppercase tracking-[0.24em] text-pink-600">Toon Tone FAQ</p>
-        <h1 className="mt-3 text-4xl font-black md:text-5xl">Toon Tone FAQ</h1>
+        <p className="mt-6 text-xs font-black uppercase tracking-[0.18em] text-pink-600 sm:text-sm sm:tracking-[0.24em]">Toon Tone FAQ</p>
+        <h1 className="mt-3 text-3xl font-black leading-tight md:text-5xl">Toon Tone FAQ</h1>
         <p className="mt-4 max-w-3xl text-lg leading-8 text-slate-700">
           Quick answers about the Toon Tone game, Toon Tone Anime, scoring, sharing, mobile play, and how the text-reference-only challenge works.
         </p>
 
         <div className="mt-8 grid gap-4 md:grid-cols-2">
           {faqItems.map(([question, answer]) => (
-            <section key={question} className="rounded-2xl border-2 border-slate-200 p-5">
-              <h2 className="text-xl font-black">{question}</h2>
+            <section key={question} className="rounded-xl border-2 border-slate-200 p-4 sm:rounded-2xl sm:p-5">
+              <h2 className="text-lg font-black sm:text-xl">{question}</h2>
               <p className="mt-3 leading-7 text-slate-700">{answer}</p>
             </section>
           ))}

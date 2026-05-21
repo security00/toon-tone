@@ -274,17 +274,17 @@ export default function ToonToneGame() {
 
   if (complete) {
     return (
-      <section className="mx-auto max-w-3xl rounded-3xl bg-white p-5 shadow-sm ring-1 ring-slate-200 sm:p-7">
+      <section className="mx-auto max-w-3xl rounded-2xl bg-white p-4 shadow-sm ring-1 ring-slate-200 sm:rounded-3xl sm:p-7">
         <div className="text-center">
           <p className="text-sm font-semibold text-slate-500">Daily complete</p>
-          <h2 className="mt-2 text-6xl font-black tracking-tight text-slate-950">{finalScore}/10</h2>
+          <h2 className="mt-2 text-5xl font-black tracking-tight text-slate-950 sm:text-6xl">{finalScore}/10</h2>
           <p className="mt-2 text-xl font-bold text-slate-700">{rating}</p>
           <canvas ref={canvasRef} width="700" height="540" className="mx-auto mt-5 hidden w-full max-w-md rounded-2xl border border-slate-200 bg-white sm:block" />
         </div>
         <div className="mt-6 space-y-2">
           {results.map((result, index) => (
-            <div key={result.questionId} className="flex items-center justify-between gap-3 rounded-2xl bg-slate-50 p-3">
-              <div>
+            <div key={result.questionId} className="flex flex-col gap-3 rounded-2xl bg-slate-50 p-3 sm:flex-row sm:items-center sm:justify-between">
+              <div className="min-w-0">
                 <p className="text-sm font-bold text-slate-900">{index + 1}. {result.characterName} · {result.targetPart}</p>
                 <p className="text-xs text-slate-500">ΔE {result.delta} · {result.feedback}</p>
               </div>
@@ -306,16 +306,16 @@ export default function ToonToneGame() {
   }
 
   return (
-    <section className="mx-auto max-w-6xl px-1">
-      <div className="mb-6 text-center">
+    <section className="mx-auto max-w-6xl">
+      <div className="mb-4 text-center sm:mb-6">
         <p className="text-sm font-bold text-slate-500">Toon Tone · {roundIndex + 1}/5</p>
-        <h1 className="mx-auto mt-2 max-w-4xl text-3xl font-black leading-tight tracking-tight text-slate-950 sm:text-5xl">
+        <h1 className="mx-auto mt-2 max-w-4xl text-2xl font-black leading-tight tracking-tight text-slate-950 sm:text-5xl">
           What is the color of <span className="bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 bg-clip-text text-transparent">{question.characterName}&apos;s {question.targetPart}</span>?
         </h1>
         <p className="mt-2 text-sm font-medium text-slate-500">from {question.sourceTitle}</p>
       </div>
 
-      <div className="grid gap-5 lg:grid-cols-[1fr_1fr] lg:items-stretch">
+      <div className="grid gap-4 lg:grid-cols-[1fr_1fr] lg:items-stretch">
         <CharacterMemoryCard question={question} reveal={memorizing} playerHex={playerHex} locked={locked} />
         {currentResult ? (
           <RoundResultPanel
@@ -348,11 +348,10 @@ export default function ToonToneGame() {
       </div>
 
       <div className="mt-3 flex flex-wrap items-center justify-center gap-3">
-        {started && !locked && <button onClick={revealFlash} className="rounded-full border border-slate-200 bg-white px-5 py-3 text-sm font-bold text-slate-600 shadow-sm">Flash target again</button>}
+        {started && !locked && <button onClick={revealFlash} className="w-full rounded-full border border-slate-200 bg-white px-5 py-3 text-sm font-bold text-slate-600 shadow-sm sm:w-auto">Flash target again</button>}
         {usedHint && <p className="text-center text-sm font-medium text-slate-500">{hueHint(question.targetColorHex)}</p>}
       </div>
 
     </section>
   );
 }
-

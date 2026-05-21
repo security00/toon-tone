@@ -15,7 +15,7 @@ const footerLinks = [
 
 export default function SiteFooter() {
   return (
-    <footer className="mt-12 border-t border-slate-200 bg-white/80 px-4 py-8 text-slate-700 sm:px-6 lg:px-8">
+    <footer className="mt-10 border-t border-slate-200 bg-white/80 px-3 py-7 text-slate-700 sm:mt-12 sm:px-6 sm:py-8 lg:px-8">
       <div className="mx-auto flex max-w-7xl flex-col gap-5 md:flex-row md:items-center md:justify-between">
         <div>
           <Link href="/" className="text-xl font-black text-slate-950">Toon Tone</Link>
@@ -24,7 +24,7 @@ export default function SiteFooter() {
             <a className="font-bold text-pink-600" href="mailto:support@toon-tone.net">support@toon-tone.net</a>.
           </p>
         </div>
-        <nav className="flex flex-wrap gap-x-5 gap-y-2 text-sm font-bold">
+        <nav className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm font-bold sm:flex sm:flex-wrap sm:gap-x-5">
           {footerLinks.map((link) => (
             <Link key={link.href} href={link.href}>{link.label}</Link>
           ))}

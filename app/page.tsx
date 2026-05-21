@@ -39,30 +39,30 @@ const faqJsonLd = {
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-slate-100 px-4 py-5 text-slate-950 sm:px-6 lg:px-8">
+    <main className="min-h-screen bg-slate-100 px-3 py-4 text-slate-950 sm:px-6 sm:py-5 lg:px-8">
       <JsonLd data={webApplicationJsonLd} />
       <JsonLd data={faqJsonLd} />
       <div className="mx-auto max-w-7xl">
-        <nav className="mb-4 flex items-center justify-between gap-3">
+        <nav className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <Link href="/" className="text-2xl font-black tracking-tight">Toon-Tone</Link>
-          <div className="hidden items-center gap-3 text-sm font-bold sm:flex">
-            <Link href="/toon-tone-game">How to play</Link>
-            <Link href="/anime-color-guessing-game">Anime</Link>
-            <Link href="/faq">FAQ</Link>
-            <Link href="/how-to-play">Guide</Link>
-            <Link href="/leaderboard">Leaderboard</Link>
-            <Link href="/about">About Us</Link>
-            <Link href="/privacy">Privacy</Link>
-            <Link href="/terms">Terms</Link>
+          <div className="flex gap-3 overflow-x-auto pb-1 text-sm font-bold [-webkit-overflow-scrolling:touch] sm:items-center sm:overflow-visible sm:pb-0">
+            <Link href="/toon-tone-game" className="whitespace-nowrap">How to play</Link>
+            <Link href="/anime-color-guessing-game" className="whitespace-nowrap">Anime</Link>
+            <Link href="/faq" className="whitespace-nowrap">FAQ</Link>
+            <Link href="/how-to-play" className="whitespace-nowrap">Guide</Link>
+            <Link href="/leaderboard" className="whitespace-nowrap">Leaderboard</Link>
+            <Link href="/about" className="whitespace-nowrap">About Us</Link>
+            <Link href="/privacy" className="whitespace-nowrap">Privacy</Link>
+            <Link href="/terms" className="whitespace-nowrap">Terms</Link>
           </div>
         </nav>
 
         <ToonToneGame />
 
         <section className="mt-10 grid gap-5 lg:grid-cols-[1fr_0.8fr]">
-          <article className="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
-            <p className="text-sm font-black uppercase tracking-[0.24em] text-pink-600">Cartoon color guessing game</p>
-            <h2 className="mt-3 text-3xl font-black">Guess cartoon character colors with HSB sliders.</h2>
+          <article className="rounded-2xl bg-white p-4 shadow-sm ring-1 ring-slate-200 sm:rounded-3xl sm:p-6">
+            <p className="text-xs font-black uppercase tracking-[0.18em] text-pink-600 sm:text-sm sm:tracking-[0.24em]">Cartoon color guessing game</p>
+            <h2 className="mt-3 text-2xl font-black leading-tight sm:text-3xl">Guess cartoon character colors with HSB sliders.</h2>
             <p className="mt-4 leading-8 text-slate-700">
               Toon Tone is a free browser game where every round asks what color a famous cartoon, anime, superhero, movie, or game character&apos;s target part should be. Adjust Hue, Saturation, and Brightness, lock your guess, then compare your memory with the answer.
             </p>
@@ -72,15 +72,15 @@ export default function Home() {
                 ["Saturation", "How pure, muted, pastel, or punchy the cartoon tone feels."],
                 ["Brightness", "How light, dark, or screen-lit the memory is."],
               ].map(([title, body]) => (
-                <div key={title} className="rounded-2xl border-2 border-slate-200 p-4">
+                <div key={title} className="rounded-xl border-2 border-slate-200 p-4 sm:rounded-2xl">
                   <h3 className="font-black">{title}</h3>
                   <p className="mt-2 text-sm leading-6 text-slate-600">{body}</p>
                 </div>
               ))}
             </div>
           </article>
-          <aside className="rounded-3xl bg-slate-950 p-6 text-white shadow-sm">
-            <h2 className="text-2xl font-black">MVP question bank</h2>
+          <aside className="rounded-2xl bg-slate-950 p-4 text-white shadow-sm sm:rounded-3xl sm:p-6">
+            <h2 className="text-xl font-black sm:text-2xl">MVP question bank</h2>
             <p className="mt-3 leading-7 text-slate-300">The game uses {QUESTIONS.length} text-reference-only questions. No official character images, screenshots, logos, audio, or video are used.</p>
             <ul className="mt-5 space-y-3 text-sm text-slate-300">
               <li>• Daily Challenge: 5 fixed rounds per day.</li>
@@ -91,9 +91,9 @@ export default function Home() {
           </aside>
         </section>
 
-        <section className="mt-10 rounded-3xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
-          <p className="text-sm font-black uppercase tracking-[0.22em] text-pink-600">What is Toon Tone?</p>
-          <h2 className="mt-3 text-3xl font-black">A quick color memory game for cartoon fans.</h2>
+        <section className="mt-8 rounded-2xl bg-white p-4 shadow-sm ring-1 ring-slate-200 sm:mt-10 sm:rounded-3xl sm:p-6">
+          <p className="text-xs font-black uppercase tracking-[0.18em] text-pink-600 sm:text-sm sm:tracking-[0.22em]">What is Toon Tone?</p>
+          <h2 className="mt-3 text-2xl font-black leading-tight sm:text-3xl">A quick color memory game for cartoon fans.</h2>
           <div className="mt-4 grid gap-5 text-slate-700 lg:grid-cols-2">
             <p className="leading-8">
               Toon Tone turns color memory into a short playable challenge. Instead of matching a random square, every prompt gives the color a context: a hair color, shirt, hat, cape, body, glove, or other recognizable character part. That makes the game feel closer to a cartoon trivia puzzle than a plain color picker.
@@ -110,15 +110,15 @@ export default function Home() {
             ["2. Tune HSB in order", "Set hue first, then saturation, then brightness. This keeps each Toon Tone guess calm and prevents random slider chasing."],
             ["3. Reveal and learn", "After you lock the guess, compare your color with the target and use the score to spot whether you missed by hue, intensity, or value."],
           ].map(([title, body]) => (
-            <article key={title} className="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
+            <article key={title} className="rounded-2xl bg-white p-4 shadow-sm ring-1 ring-slate-200 sm:rounded-3xl sm:p-6">
               <h2 className="text-xl font-black">{title}</h2>
               <p className="mt-3 leading-7 text-slate-700">{body}</p>
             </article>
           ))}
         </section>
 
-        <section className="mt-10 rounded-3xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
-          <h2 className="text-3xl font-black">Why HSB works for Toon Tone</h2>
+        <section className="mt-8 rounded-2xl bg-white p-4 shadow-sm ring-1 ring-slate-200 sm:mt-10 sm:rounded-3xl sm:p-6">
+          <h2 className="text-2xl font-black leading-tight sm:text-3xl">Why HSB works for Toon Tone</h2>
           <div className="mt-4 grid gap-5 md:grid-cols-3">
             <p className="leading-7 text-slate-700"><strong>Hue</strong> answers the first memory question: is the target red, orange, yellow, green, blue, purple, or somewhere between?</p>
             <p className="leading-7 text-slate-700"><strong>Saturation</strong> handles how vivid the cartoon color feels. Many misses happen when a guess is too neon or too washed out.</p>
@@ -127,15 +127,15 @@ export default function Home() {
         </section>
 
         <section className="mt-10 grid gap-5 lg:grid-cols-[0.9fr_1.1fr]">
-          <article className="rounded-3xl bg-slate-950 p-6 text-white shadow-sm">
-            <h2 className="text-3xl font-black">How scoring works</h2>
+          <article className="rounded-2xl bg-slate-950 p-4 text-white shadow-sm sm:rounded-3xl sm:p-6">
+            <h2 className="text-2xl font-black leading-tight sm:text-3xl">How scoring works</h2>
             <p className="mt-4 leading-8 text-slate-300">
               Toon Tone compares your selected color with the hidden target color and converts the visual distance into a 0–10 score. A near match earns a high round score; a color that drifts in hue, saturation, or brightness loses points. The final daily result averages the five rounds.
             </p>
             <Link href="/how-toon-tone-scoring-works" className="mt-5 inline-block rounded-full bg-white px-5 py-3 font-black text-slate-950">Read the scoring guide</Link>
           </article>
-          <article className="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
-            <h2 className="text-3xl font-black">Tips for better scores</h2>
+          <article className="rounded-2xl bg-white p-4 shadow-sm ring-1 ring-slate-200 sm:rounded-3xl sm:p-6">
+            <h2 className="text-2xl font-black leading-tight sm:text-3xl">Tips for better scores</h2>
             <ul className="mt-4 space-y-3 leading-7 text-slate-700">
               <li>• Start with the color family before fine-tuning saturation or brightness.</li>
               <li>• For clothing and accessories, check whether the remembered color was vivid or muted.</li>
@@ -145,8 +145,8 @@ export default function Home() {
           </article>
         </section>
 
-        <section className="mt-10 rounded-3xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
-          <h2 className="text-3xl font-black">Learn more</h2>
+        <section className="mt-8 rounded-2xl bg-white p-4 shadow-sm ring-1 ring-slate-200 sm:mt-10 sm:rounded-3xl sm:p-6">
+          <h2 className="text-2xl font-black leading-tight sm:text-3xl">Learn more</h2>
           <div className="mt-4 grid gap-4 md:grid-cols-3">
             {[
               ["How to play", "/how-to-play", "A simple walkthrough for the daily Toon Tone challenge."],
@@ -155,7 +155,7 @@ export default function Home() {
               ["Improve color memory", "/how-to-get-better-at-color-memory", "Practical tips for reading hue, saturation, and brightness."],
               ["Scoring guide", "/how-toon-tone-scoring-works", "Understand how each guess turns into a score."],
             ].map(([title, href, body]) => (
-              <Link key={href} href={href} className="rounded-2xl border-2 border-slate-200 p-4 transition hover:-translate-y-1 hover:border-pink-400">
+              <Link key={href} href={href} className="rounded-xl border-2 border-slate-200 p-4 transition hover:-translate-y-1 hover:border-pink-400 sm:rounded-2xl">
                 <h3 className="font-black">{title}</h3>
                 <p className="mt-2 text-sm leading-6 text-slate-600">{body}</p>
               </Link>
@@ -163,8 +163,8 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="mt-10 rounded-3xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
-          <h2 className="text-3xl font-black">FAQ</h2>
+        <section className="mt-8 rounded-2xl bg-white p-4 shadow-sm ring-1 ring-slate-200 sm:mt-10 sm:rounded-3xl sm:p-6">
+          <h2 className="text-2xl font-black leading-tight sm:text-3xl">FAQ</h2>
           <div className="mt-4 grid gap-4 md:grid-cols-2">
             {faqItems.map(([q, a]) => (
               <div key={q} className="rounded-2xl border-2 border-slate-200 bg-white p-4">

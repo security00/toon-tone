@@ -16,14 +16,14 @@ type Props = {
 
 export default function ColorMatchPanel({ hsb, playerHex, started, locked, memorizing, usedHint, progress, onChange, onStart, onSubmit, onHint }: Props) {
   return (
-    <div className="relative h-full min-h-[392px] overflow-hidden rounded-[2rem] shadow-[0_22px_60px_rgba(79,70,229,0.16)]" style={{ backgroundColor: playerHex }}>
+    <div className="relative h-full min-h-[330px] overflow-hidden rounded-2xl shadow-sm sm:min-h-[392px] sm:rounded-[2rem] sm:shadow-[0_22px_60px_rgba(79,70,229,0.16)]" style={{ backgroundColor: playerHex }}>
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_20%,rgba(255,255,255,0.22),transparent_32%)]" />
 
-      <div className="absolute left-5 top-5 z-10 rounded-full bg-white/22 px-3 py-1 text-sm font-black text-white shadow-sm backdrop-blur-md">
+      <div className="absolute left-4 top-4 z-10 rounded-full bg-white/22 px-3 py-1 text-sm font-black text-white shadow-sm backdrop-blur-md sm:left-5 sm:top-5">
         {progress}
       </div>
 
-      <div className="absolute bottom-6 left-6 top-16 z-10 flex w-[104px] items-center justify-center rounded-[1.7rem] bg-white/18 px-3 py-5 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.24)] backdrop-blur-md">
+      <div className="absolute bottom-5 left-4 top-14 z-10 flex w-[96px] items-center justify-center rounded-2xl bg-white/18 px-3 py-4 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.24)] backdrop-blur-md sm:bottom-6 sm:left-6 sm:top-16 sm:w-[104px] sm:rounded-[1.7rem] sm:py-5">
         <div className="flex h-full items-center justify-center gap-3">
           <VerticalSlider label="H" value={hsb.h} min={0} max={360} disabled={locked || !started} onChange={(value) => onChange("h", value)} gradient="linear-gradient(180deg,#ff3b30 0%,#ffcc00 17%,#34c759 34%,#00c7be 50%,#007aff 67%,#af52de 84%,#ff2d55 100%)" />
           <VerticalSlider label="S" value={hsb.s} min={0} max={100} disabled={locked || !started} onChange={(value) => onChange("s", value)} gradient={`linear-gradient(180deg,${playerHex} 0%,rgba(255,255,255,0.92) 100%)`} />
@@ -31,13 +31,13 @@ export default function ColorMatchPanel({ hsb, playerHex, started, locked, memor
         </div>
       </div>
 
-      <div className="absolute bottom-5 right-5 z-10 flex items-center gap-3">
+      <div className="absolute bottom-4 right-4 z-10 flex items-center gap-2 sm:bottom-5 sm:right-5 sm:gap-3">
         <button
           type="button"
           disabled={!started || locked || usedHint}
           onClick={onHint}
           aria-label="Hint"
-          className="grid h-12 w-12 place-items-center rounded-full bg-[#e5f2ea] text-xl font-black text-slate-800 shadow-[0_10px_24px_rgba(15,23,42,0.18)] transition hover:scale-105 disabled:cursor-not-allowed disabled:opacity-40"
+          className="grid h-11 w-11 place-items-center rounded-full bg-[#e5f2ea] text-xl font-black text-slate-800 shadow-[0_10px_24px_rgba(15,23,42,0.18)] transition hover:scale-105 disabled:cursor-not-allowed disabled:opacity-40 sm:h-12 sm:w-12"
         >
           ?
         </button>
@@ -45,7 +45,7 @@ export default function ColorMatchPanel({ hsb, playerHex, started, locked, memor
           <button
             type="button"
             onClick={onStart}
-            className="grid h-12 min-w-24 place-items-center rounded-full bg-white px-5 text-base font-black text-slate-900 shadow-[0_10px_24px_rgba(15,23,42,0.22)] transition hover:scale-105"
+            className="grid h-11 min-w-20 place-items-center rounded-full bg-white px-4 text-base font-black text-slate-900 shadow-[0_10px_24px_rgba(15,23,42,0.22)] transition hover:scale-105 sm:h-12 sm:min-w-24 sm:px-5"
           >
             Start
           </button>
@@ -55,14 +55,14 @@ export default function ColorMatchPanel({ hsb, playerHex, started, locked, memor
             disabled={locked || memorizing}
             onClick={onSubmit}
             aria-label="Submit guess"
-            className="grid h-12 w-12 place-items-center rounded-full bg-white text-2xl font-black text-slate-900 shadow-[0_10px_24px_rgba(15,23,42,0.22)] transition hover:scale-105 disabled:cursor-not-allowed disabled:opacity-40"
+            className="grid h-11 w-11 place-items-center rounded-full bg-white text-2xl font-black text-slate-900 shadow-[0_10px_24px_rgba(15,23,42,0.22)] transition hover:scale-105 disabled:cursor-not-allowed disabled:opacity-40 sm:h-12 sm:w-12"
           >
             ✓
           </button>
         )}
       </div>
 
-      <div className="absolute bottom-5 left-[142px] z-10 space-y-2">
+      <div className="absolute bottom-20 left-4 z-10 space-y-2 sm:bottom-5 sm:left-[142px]">
         <div className="rounded-full bg-black/16 px-3 py-1 font-mono text-xs font-black uppercase tracking-wide text-white shadow-sm backdrop-blur-md">
           {playerHex}
         </div>
@@ -77,7 +77,7 @@ export default function ColorMatchPanel({ hsb, playerHex, started, locked, memor
 function VerticalSlider({ label, value, min, max, disabled, gradient, onChange }: { label: string; value: number; min: number; max: number; disabled: boolean; gradient: string; onChange: (value: number) => void }) {
   const percent = ((value - min) / (max - min)) * 100;
   return (
-    <label className="relative h-[258px] w-4">
+    <label className="relative h-[218px] w-6 sm:h-[258px] sm:w-4">
       <span className="absolute -bottom-6 left-1/2 -translate-x-1/2 text-[10px] font-black text-white/85">{label}</span>
       <span className="absolute -top-7 left-1/2 -translate-x-1/2 rounded-full bg-black/18 px-1.5 py-0.5 font-mono text-[10px] font-black text-white shadow-sm backdrop-blur-md">{value}</span>
       <span className="absolute inset-0 rounded-full shadow-[inset_0_0_0_1px_rgba(255,255,255,0.38),0_10px_20px_rgba(15,23,42,0.12)]" style={{ background: gradient }} />
