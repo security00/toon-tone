@@ -3,14 +3,14 @@ import GuidePage, { guideMetadata } from "@/components/GuidePage";
 export const metadata = guideMetadata(
   "How to Play Toon Tone | Daily Cartoon Color Guessing Guide",
   "Learn how to play Toon Tone, read each cartoon color prompt, tune HSB sliders, reveal your score, and share the daily challenge.",
-  "/how-to-play/"
+  "/how-to-play"
 );
 
 export default function Page() {
   return (
     <GuidePage
       title="How to Play Toon Tone"
-      canonical="/how-to-play/"
+      canonical="/how-to-play"
       intro="Toon Tone is built to be playable in seconds: read the character prompt, remember the target part, adjust Hue, Saturation, and Brightness, then lock your guess and compare the result."
       sections={[
         { title: "Start the daily challenge", body: "Open the Toon Tone homepage and press Start. The daily challenge gives everyone the same five prompts, which makes scores easier to compare and share with friends." },

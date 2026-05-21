@@ -1,17 +1,16 @@
-import type { Metadata } from "next";
-import SeoGamePage from "@/components/SeoGamePage";
+import SeoGamePage, { seoGameMetadata } from "@/components/SeoGamePage";
 
-export const metadata: Metadata = {
-  title: "Play Toon-Tone Online | Free Browser Color Guessing Game",
-  description: "Play Toon-Tone online for free. Start the browser color guessing game, match character-inspired colors, and share your score.",
-  alternates: { canonical: "/play/" },
-};
+export const metadata = seoGameMetadata(
+  "Play Toon-Tone Online | Free Browser Color Guessing Game",
+  "Play Toon-Tone online for free. Start the browser color guessing game, match character-inspired colors, and share your score.",
+  "/play"
+);
 
 export default function Page() {
   return (
     <SeoGamePage
       title="Play Toon-Tone Online"
-      canonical="/play/"
+      canonical="/play"
       intro="Start the free browser version of Toon-Tone online. No install, no account, just a quick cartoon color memory challenge with HSB sliders and instant scoring."
       sections={[
         { title: "Open and play", body: "The playable Toon-Tone game loads at the top of the page. Press Start, read the first prompt, and begin matching the target color with the sliders." },

@@ -1,22 +1,25 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import SiteFooter from "@/components/SiteFooter";
+import { openGraphImage, twitterImage } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "Terms of Use | Toon-Tone",
   description: "Read the Toon-Tone Terms of Use for the unofficial cartoon color memory game.",
-  alternates: { canonical: "/terms/" },
+  alternates: { canonical: "/terms" },
   openGraph: {
     title: "Terms of Use | Toon-Tone",
     description: "Read the Toon-Tone Terms of Use for the unofficial cartoon color memory game.",
-    url: "https://toon-tone.net/terms/",
+    url: "https://toon-tone.net/terms",
     siteName: "Toon Tone",
+    images: [openGraphImage],
     type: "website",
   },
   twitter: {
     card: "summary",
     title: "Terms of Use | Toon-Tone",
     description: "Read the Toon-Tone Terms of Use for the unofficial cartoon color memory game.",
+    images: [twitterImage],
   },
 };
 

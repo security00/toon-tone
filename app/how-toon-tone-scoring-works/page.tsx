@@ -3,14 +3,14 @@ import GuidePage, { guideMetadata } from "@/components/GuidePage";
 export const metadata = guideMetadata(
   "How Toon Tone Scoring Works | Color Guessing Score Guide",
   "Understand how Toon Tone turns each cartoon color guess into a 0–10 score based on the distance between your selected color and the target.",
-  "/how-toon-tone-scoring-works/"
+  "/how-toon-tone-scoring-works"
 );
 
 export default function Page() {
   return (
     <GuidePage
       title="How Toon Tone Scoring Works"
-      canonical="/how-toon-tone-scoring-works/"
+      canonical="/how-toon-tone-scoring-works"
       intro="Toon Tone scoring is meant to feel simple: the closer your selected color is to the hidden target, the higher your round score. The final daily score averages your five guesses."
       sections={[
         { title: "Every round has a hidden target color", body: "A Toon Tone prompt stores one target color for the named character part. Your slider position creates a guessed color, and the game compares those two colors after you lock the round." },

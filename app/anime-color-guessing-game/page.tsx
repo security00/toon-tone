@@ -1,17 +1,16 @@
-import type { Metadata } from "next";
-import SeoGamePage from "@/components/SeoGamePage";
+import SeoGamePage, { seoGameMetadata } from "@/components/SeoGamePage";
 
-export const metadata: Metadata = {
-  title: "Anime Color Guessing Game | Match Anime Character Colors",
-  description: "Play an anime color guessing game with Toon Tone. Match anime-inspired character colors from memory using HSB sliders and daily scoring.",
-  alternates: { canonical: "/anime-color-guessing-game/" },
-};
+export const metadata = seoGameMetadata(
+  "Anime Color Guessing Game | Match Anime Character Colors",
+  "Play an anime color guessing game with Toon Tone. Match anime-inspired character colors from memory using HSB sliders and daily scoring.",
+  "/anime-color-guessing-game"
+);
 
 export default function Page() {
   return (
     <SeoGamePage
       title="Anime Color Guessing Game"
-      canonical="/anime-color-guessing-game/"
+      canonical="/anime-color-guessing-game"
       intro="Play anime and cartoon color memory rounds with text-only character references and HSB color controls. Toon Tone turns memorable anime-inspired colors into quick browser challenges."
       sections={[
         { title: "Why anime colors are fun to guess", body: "Anime characters often use strong hair colors, outfit accents, accessories, and contrast-heavy palettes. Those details make anime-inspired prompts a natural fit for a color memory game." },

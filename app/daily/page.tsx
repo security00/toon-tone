@@ -1,17 +1,16 @@
-import type { Metadata } from "next";
-import SeoGamePage from "@/components/SeoGamePage";
+import SeoGamePage, { seoGameMetadata } from "@/components/SeoGamePage";
 
-export const metadata: Metadata = {
-  title: "Daily Toon Tone Challenge | 5-Round Color Memory Game",
-  description: "Play today's fixed 5-round Toon Tone challenge. Everyone gets the same cartoon color memory prompts for easier score comparison.",
-  alternates: { canonical: "/daily/" },
-};
+export const metadata = seoGameMetadata(
+  "Daily Toon Tone Challenge | 5-Round Color Memory Game",
+  "Play today's fixed 5-round Toon Tone challenge. Everyone gets the same cartoon color memory prompts for easier score comparison.",
+  "/daily"
+);
 
 export default function Page() {
   return (
     <SeoGamePage
       title="Daily Toon Tone Challenge"
-      canonical="/daily/"
+      canonical="/daily"
       intro="Play today's fixed 5-round Toon Tone challenge. Everyone gets the same cartoon color memory questions for the day, so scores are easy to compare and share."
       sections={[
         { title: "Same prompts for everyone", body: "The daily Toon Tone challenge uses a shared seed, so players see the same five prompts on the same day. That makes scores easier to compare without needing an account." },

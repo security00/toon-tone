@@ -1,17 +1,16 @@
-import type { Metadata } from "next";
-import SeoGamePage from "@/components/SeoGamePage";
+import SeoGamePage, { seoGameMetadata } from "@/components/SeoGamePage";
 
-export const metadata: Metadata = {
-  title: "Cartoon Color Guessing Game | Match Character Colors Online",
-  description: "Play a cartoon color guessing game online. Remember character colors, adjust HSB sliders, reveal the answer, and compare your score.",
-  alternates: { canonical: "/cartoon-color-guessing-game/" },
-};
+export const metadata = seoGameMetadata(
+  "Cartoon Color Guessing Game | Match Character Colors Online",
+  "Play a cartoon color guessing game online. Remember character colors, adjust HSB sliders, reveal the answer, and compare your score.",
+  "/cartoon-color-guessing-game"
+);
 
 export default function Page() {
   return (
     <SeoGamePage
       title="Cartoon Color Guessing Game"
-      canonical="/cartoon-color-guessing-game/"
+      canonical="/cartoon-color-guessing-game"
       intro="This cartoon color guessing game tests how well you remember iconic visual details. Instead of choosing from multiple choice answers, you rebuild the target color with Hue, Saturation, and Brightness controls."
       sections={[
         { title: "A memory test, not a quiz list", body: "Many cartoon quizzes ask you to identify a character from a picture or palette. Toon Tone focuses on color memory itself: can you recreate the exact tone of a named character part after reading the prompt?" },

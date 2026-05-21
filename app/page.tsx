@@ -46,12 +46,12 @@ export default function Home() {
         <nav className="mb-4 flex items-center justify-between gap-3">
           <Link href="/" className="text-2xl font-black tracking-tight">Toon-Tone</Link>
           <div className="hidden items-center gap-3 text-sm font-bold sm:flex">
-            <Link href="/toon-tone-game/">How to play</Link>
-            <Link href="/how-to-play/">Guide</Link>
-            <Link href="/leaderboard/">Leaderboard</Link>
-            <Link href="/about/">About Us</Link>
-            <Link href="/privacy/">Privacy</Link>
-            <Link href="/terms/">Terms</Link>
+            <Link href="/toon-tone-game">How to play</Link>
+            <Link href="/how-to-play">Guide</Link>
+            <Link href="/leaderboard">Leaderboard</Link>
+            <Link href="/about">About Us</Link>
+            <Link href="/privacy">Privacy</Link>
+            <Link href="/terms">Terms</Link>
           </div>
         </nav>
 
@@ -130,7 +130,7 @@ export default function Home() {
             <p className="mt-4 leading-8 text-slate-300">
               Toon Tone compares your selected color with the hidden target color and converts the visual distance into a 0–10 score. A near match earns a high round score; a color that drifts in hue, saturation, or brightness loses points. The final daily result averages the five rounds.
             </p>
-            <Link href="/how-toon-tone-scoring-works/" className="mt-5 inline-block rounded-full bg-white px-5 py-3 font-black text-slate-950">Read the scoring guide</Link>
+            <Link href="/how-toon-tone-scoring-works" className="mt-5 inline-block rounded-full bg-white px-5 py-3 font-black text-slate-950">Read the scoring guide</Link>
           </article>
           <article className="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
             <h2 className="text-3xl font-black">Tips for better scores</h2>
@@ -147,9 +147,9 @@ export default function Home() {
           <h2 className="text-3xl font-black">Learn more</h2>
           <div className="mt-4 grid gap-4 md:grid-cols-3">
             {[
-              ["How to play", "/how-to-play/", "A simple walkthrough for the daily Toon Tone challenge."],
-              ["Improve color memory", "/how-to-get-better-at-color-memory/", "Practical tips for reading hue, saturation, and brightness."],
-              ["Scoring guide", "/how-toon-tone-scoring-works/", "Understand how each guess turns into a score."],
+              ["How to play", "/how-to-play", "A simple walkthrough for the daily Toon Tone challenge."],
+              ["Improve color memory", "/how-to-get-better-at-color-memory", "Practical tips for reading hue, saturation, and brightness."],
+              ["Scoring guide", "/how-toon-tone-scoring-works", "Understand how each guess turns into a score."],
             ].map(([title, href, body]) => (
               <Link key={href} href={href} className="rounded-2xl border-2 border-slate-200 p-4 transition hover:-translate-y-1 hover:border-pink-400">
                 <h3 className="font-black">{title}</h3>

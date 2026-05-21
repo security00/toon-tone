@@ -3,14 +3,14 @@ import GuidePage, { guideMetadata } from "@/components/GuidePage";
 export const metadata = guideMetadata(
   "How to Get Better at Color Memory | Toon Tone Tips",
   "Improve your Toon Tone score with practical color memory tips for hue, saturation, brightness, and cartoon character color prompts.",
-  "/how-to-get-better-at-color-memory/"
+  "/how-to-get-better-at-color-memory"
 );
 
 export default function Page() {
   return (
     <GuidePage
       title="How to Get Better at Color Memory"
-      canonical="/how-to-get-better-at-color-memory/"
+      canonical="/how-to-get-better-at-color-memory"
       intro="Better Toon Tone scores come from slowing the guess down. Treat hue, saturation, and brightness as three separate memory questions instead of one vague color impression."
       sections={[
         { title: "Name the hue family first", body: "Before moving sliders, say the color family in your head. Is it closer to red-orange, yellow-green, cyan, blue, violet, or pink? This gives every Toon Tone guess a stable anchor." },

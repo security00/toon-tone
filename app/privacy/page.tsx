@@ -1,22 +1,25 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import SiteFooter from "@/components/SiteFooter";
+import { openGraphImage, twitterImage } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "Privacy Policy | Toon-Tone",
   description: "Read the Toon-Tone Privacy Policy, including local browser storage, contact information, and future analytics notices.",
-  alternates: { canonical: "/privacy/" },
+  alternates: { canonical: "/privacy" },
   openGraph: {
     title: "Privacy Policy | Toon-Tone",
     description: "Read the Toon-Tone Privacy Policy, including local browser storage, contact information, and future analytics notices.",
-    url: "https://toon-tone.net/privacy/",
+    url: "https://toon-tone.net/privacy",
     siteName: "Toon Tone",
+    images: [openGraphImage],
     type: "website",
   },
   twitter: {
     card: "summary",
     title: "Privacy Policy | Toon-Tone",
     description: "Read the Toon-Tone Privacy Policy, including local browser storage, contact information, and future analytics notices.",
+    images: [twitterImage],
   },
 };
 

@@ -1,12 +1,12 @@
 import Link from "next/link";
 
 const footerLinks = [
-  { href: "/play/", label: "Play" },
-  { href: "/daily/", label: "Daily" },
-  { href: "/leaderboard/", label: "Leaderboard" },
-  { href: "/about/", label: "About Us" },
-  { href: "/privacy/", label: "Privacy Policy" },
-  { href: "/terms/", label: "Terms of Use" },
+  { href: "/play", label: "Play" },
+  { href: "/daily", label: "Daily" },
+  { href: "/leaderboard", label: "Leaderboard" },
+  { href: "/about", label: "About Us" },
+  { href: "/privacy", label: "Privacy Policy" },
+  { href: "/terms", label: "Terms of Use" },
   { href: "/sitemap.xml", label: "Sitemap" },
   { href: "/robots.txt", label: "Robots" },
 ];

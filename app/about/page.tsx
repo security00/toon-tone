@@ -1,22 +1,25 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import SiteFooter from "@/components/SiteFooter";
+import { openGraphImage, twitterImage } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "About Us | Toon-Tone",
   description: "Learn about Toon-Tone, a free unofficial cartoon color memory game built around text references and HSB color sliders.",
-  alternates: { canonical: "/about/" },
+  alternates: { canonical: "/about" },
   openGraph: {
     title: "About Us | Toon-Tone",
     description: "Learn about Toon-Tone, a free unofficial cartoon color memory game built around text references and HSB color sliders.",
-    url: "https://toon-tone.net/about/",
+    url: "https://toon-tone.net/about",
     siteName: "Toon Tone",
+    images: [openGraphImage],
     type: "website",
   },
   twitter: {
     card: "summary",
     title: "About Us | Toon-Tone",
     description: "Learn about Toon-Tone, a free unofficial cartoon color memory game built around text references and HSB color sliders.",
+    images: [twitterImage],
   },
 };
 

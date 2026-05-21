@@ -1,17 +1,16 @@
-import type { Metadata } from "next";
-import SeoGamePage from "@/components/SeoGamePage";
+import SeoGamePage, { seoGameMetadata } from "@/components/SeoGamePage";
 
-export const metadata: Metadata = {
-  title: "Toon Tone Game | Play the Cartoon Color Guessing Challenge",
-  description: "Play the Toon Tone game online. Guess cartoon, anime, superhero, movie, and game character colors with HSB sliders and daily scoring.",
-  alternates: { canonical: "/toon-tone-game/" },
-};
+export const metadata = seoGameMetadata(
+  "Toon Tone Game | Play the Cartoon Color Guessing Challenge",
+  "Play the Toon Tone game online. Guess cartoon, anime, superhero, movie, and game character colors with HSB sliders and daily scoring.",
+  "/toon-tone-game"
+);
 
 export default function Page() {
   return (
     <SeoGamePage
       title="Toon Tone Game"
-      canonical="/toon-tone-game/"
+      canonical="/toon-tone-game"
       intro="Toon Tone is a cartoon color guessing game where you answer questions like what color is a character's shirt, hat, skin, cheeks, cape, or fur. Each round turns a familiar character detail into a quick memory challenge."
       sections={[
         { title: "What makes the Toon Tone game different?", body: "The Toon Tone game is not a normal color picker. It gives every color a character context, then asks you to rebuild the remembered tone with Hue, Saturation, and Brightness sliders. That makes each guess feel like a small cartoon trivia puzzle." },

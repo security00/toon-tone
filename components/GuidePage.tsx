@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import JsonLd from "@/components/JsonLd";
 import SiteFooter from "@/components/SiteFooter";
+import { openGraphImage, SITE_URL, twitterImage } from "@/lib/seo";
 
 type GuideSection = {
   title: string;
@@ -24,14 +25,16 @@ export function guideMetadata(title: string, description: string, canonical: str
     openGraph: {
       title,
       description,
-      url: `https://toon-tone.net${canonical}`,
+      url: `${SITE_URL}${canonical}`,
       siteName: "Toon Tone",
+      images: [openGraphImage],
       type: "article",
     },
     twitter: {
       card: "summary",
       title,
       description,
+      images: [twitterImage],
     },
   };
 }
@@ -42,7 +45,7 @@ export default function GuidePage({ title, intro, sections, faq, canonical }: Gu
     "@type": "HowTo",
     name: title,
     description: intro,
-    url: `https://toon-tone.net${canonical}`,
+    url: `${SITE_URL}${canonical}`,
     step: sections.slice(0, 5).map((section, index) => ({
       "@type": "HowToStep",
       position: index + 1,
@@ -90,9 +93,9 @@ export default function GuidePage({ title, intro, sections, faq, canonical }: Gu
             <h2 className="text-2xl font-black">Related Toon Tone guides</h2>
             <div className="mt-4 grid gap-3 md:grid-cols-3">
               {[
-                ["How to play", "/how-to-play/"],
-                ["Improve color memory", "/how-to-get-better-at-color-memory/"],
-                ["Scoring guide", "/how-toon-tone-scoring-works/"],
+                ["How to play", "/how-to-play"],
+                ["Improve color memory", "/how-to-get-better-at-color-memory"],
+                ["Scoring guide", "/how-toon-tone-scoring-works"],
               ].map(([label, href]) => (
                 <Link key={href} href={href} className="rounded-2xl bg-white px-4 py-3 font-black text-slate-950">{label}</Link>
               ))}

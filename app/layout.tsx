@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Script from "next/script";
+import { openGraphImage, SITE_URL, twitterImage } from "@/lib/seo";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -14,10 +15,10 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://toon-tone.net"),
+  metadataBase: new URL(SITE_URL),
   title: "Toon Tone Game | Cartoon Color Guessing Challenge",
   description:
-    "Play Toon Tone, a free cartoon color guessing game. Match character colors from memory with Hue, Saturation, and Brightness sliders, then share your daily score.",
+    "Play Toon Tone, a free cartoon color guessing game. Match character colors from memory with HSB sliders, then share your daily score.",
   keywords: [
     "toon tone game",
     "cartoon color guessing game",
@@ -29,9 +30,16 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Toon Tone Game",
     description: "Guess cartoon character colors with HSB sliders and share your Daily Challenge score.",
-    url: "https://toon-tone.net",
+    url: SITE_URL,
     siteName: "Toon Tone",
+    images: [openGraphImage],
     type: "website",
+  },
+  twitter: {
+    card: "summary",
+    title: "Toon Tone Game",
+    description: "Guess cartoon character colors with HSB sliders and share your Daily Challenge score.",
+    images: [twitterImage],
   },
 };
 

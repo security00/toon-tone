@@ -1,7 +1,9 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import JsonLd from "./JsonLd";
 import SiteFooter from "./SiteFooter";
 import ToonToneGame from "./ToonToneGame";
+import { openGraphImage, SITE_URL, twitterImage } from "@/lib/seo";
 
 type SeoSection = {
   title: string;
@@ -18,21 +20,43 @@ type SeoGamePageProps = {
 };
 
 const relatedLinks = [
-  ["Toon Tone Game", "/toon-tone-game/"],
-  ["Cartoon Color Guessing Game", "/cartoon-color-guessing-game/"],
-  ["Guess Cartoon Character Color", "/guess-cartoon-character-color/"],
-  ["Character Color Game", "/character-color-game/"],
-  ["Anime Color Guessing Game", "/anime-color-guessing-game/"],
+  ["Toon Tone Game", "/toon-tone-game"],
+  ["Cartoon Color Guessing Game", "/cartoon-color-guessing-game"],
+  ["Guess Cartoon Character Color", "/guess-cartoon-character-color"],
+  ["Character Color Game", "/character-color-game"],
+  ["Anime Color Guessing Game", "/anime-color-guessing-game"],
 ];
+
+export function seoGameMetadata(title: string, description: string, canonical: string): Metadata {
+  return {
+    title,
+    description,
+    alternates: { canonical },
+    openGraph: {
+      title,
+      description,
+      url: `${SITE_URL}${canonical}`,
+      siteName: "Toon Tone",
+      images: [openGraphImage],
+      type: "website",
+    },
+    twitter: {
+      card: "summary",
+      title,
+      description,
+      images: [twitterImage],
+    },
+  };
+}
 
 export default function SeoGamePage({ title, intro, canonical, sections, tips, faq }: SeoGamePageProps) {
   const webPageJsonLd = {
     "@context": "https://schema.org",
     "@type": "WebPage",
     name: title,
-    url: `https://toon-tone.net${canonical}`,
+    url: `${SITE_URL}${canonical}`,
     description: intro,
-    isPartOf: { "@type": "WebSite", name: "Toon Tone", url: "https://toon-tone.net/" },
+    isPartOf: { "@type": "WebSite", name: "Toon Tone", url: `${SITE_URL}/` },
   };
 
   const faqJsonLd = {

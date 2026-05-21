@@ -1,17 +1,16 @@
-import type { Metadata } from "next";
-import SeoGamePage from "@/components/SeoGamePage";
+import SeoGamePage, { seoGameMetadata } from "@/components/SeoGamePage";
 
-export const metadata: Metadata = {
-  title: "Character Color Game | Guess Cartoon and Anime Colors",
-  description: "Play a character color game for cartoons, anime, superheroes, movies, and games. Match target parts with HSB sliders and compare your score.",
-  alternates: { canonical: "/character-color-game/" },
-};
+export const metadata = seoGameMetadata(
+  "Character Color Game | Guess Cartoon and Anime Colors",
+  "Play a character color game for cartoons, anime, superheroes, movies, and games. Match target parts with HSB sliders and compare your score.",
+  "/character-color-game"
+);
 
 export default function Page() {
   return (
     <SeoGamePage
       title="Character Color Game"
-      canonical="/character-color-game/"
+      canonical="/character-color-game"
       intro="A fast character color memory game for cartoons, anime, superheroes, video games, movies, kids shows, and mascots. Read the target part, rebuild the color, and see how close your visual memory gets."
       sections={[
         { title: "Character context makes color memorable", body: "A plain blue square is easy to forget, but a character's jacket, hair, cape, or hat gives that color a story. Toon Tone uses that context to make each color match feel more playful." },

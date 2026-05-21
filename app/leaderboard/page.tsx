@@ -1,22 +1,25 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import SiteFooter from "@/components/SiteFooter";
+import { openGraphImage, twitterImage } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "Leaderboard | Toon Tone",
   description: "View Toon Tone leaderboard plans and local score history for the daily cartoon color guessing game.",
-  alternates: { canonical: "/leaderboard/" },
+  alternates: { canonical: "/leaderboard" },
   openGraph: {
     title: "Leaderboard | Toon Tone",
     description: "View Toon Tone leaderboard plans and local score history for the daily cartoon color guessing game.",
-    url: "https://toon-tone.net/leaderboard/",
+    url: "https://toon-tone.net/leaderboard",
     siteName: "Toon Tone",
+    images: [openGraphImage],
     type: "website",
   },
   twitter: {
     card: "summary",
     title: "Leaderboard | Toon Tone",
     description: "View Toon Tone leaderboard plans and local score history for the daily cartoon color guessing game.",
+    images: [twitterImage],
   },
 };
 

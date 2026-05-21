@@ -1,17 +1,16 @@
-import type { Metadata } from "next";
-import SeoGamePage from "@/components/SeoGamePage";
+import SeoGamePage, { seoGameMetadata } from "@/components/SeoGamePage";
 
-export const metadata: Metadata = {
-  title: "Guess Cartoon Character Color | Toon Tone Color Memory Game",
-  description: "Guess cartoon character colors from memory. Read the target part, tune HSB sliders, reveal the answer, and improve your Toon Tone score.",
-  alternates: { canonical: "/guess-cartoon-character-color/" },
-};
+export const metadata = seoGameMetadata(
+  "Guess Cartoon Character Color | Toon Tone Color Memory Game",
+  "Guess cartoon character colors from memory. Read the target part, tune HSB sliders, reveal the answer, and improve your Toon Tone score.",
+  "/guess-cartoon-character-color"
+);
 
 export default function Page() {
   return (
     <SeoGamePage
       title="Guess Cartoon Character Color"
-      canonical="/guess-cartoon-character-color/"
+      canonical="/guess-cartoon-character-color"
       intro="Guess the color of a cartoon character's target part from memory, then compare your selected tone with the answer after submitting. Toon Tone makes the challenge specific by naming the character, source, and part to match."
       sections={[
         { title: "Focus on one character part", body: "Each prompt asks for a specific target such as hair, a jacket, a hat, a glove, skin, fur, or a cape. Narrowing the task to one part makes the color guess clearer and more skill-based." },
