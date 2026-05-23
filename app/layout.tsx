@@ -66,6 +66,18 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
             })(window, document, "clarity", "script", "wqafq2jegv");
           `}
         </Script>
+        <Script
+          id="plausible-analytics"
+          async
+          src="https://plausible.shipsolo.io/js/pa--6ZYlwfvGu1ehbS2wcYw3.js"
+        />
+        <Script id="plausible-init">
+          {`
+            window.plausible = window.plausible || function(){(plausible.q = plausible.q || []).push(arguments)};
+            plausible.init = plausible.init || function(i){plausible.o = i || {}};
+            plausible.init();
+          `}
+        </Script>
       </body>
     </html>
   );
